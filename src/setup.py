@@ -1,4 +1,4 @@
-#########################################################################
+########################################################################
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,31 +26,47 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
 #########################################################################
 
 import os
+import platform
 from distutils.core import setup, Extension
 
+
+def get_bitsize():
+    bitsize, bintype = platform.architecture()
+    return bitsize[:2]
+
+libraries = {
+    '32': ['FPLibrary'],
+    '64': ['FPLibrary64']
+}
+extra_compile_args = {
+    '32': [],
+    '64': ['-fPIC']
+}
+
 CASHOME = os.environ['CENTERA_HOME']
-
+bitsize = get_bitsize()
 native = Extension('FPNative',
-                    sources = ['native/pycentera.c'],
-                    include_dirs= [CASHOME + '/include'],
-                    libraries = ['FPLibrary'],
-                    library_dirs = [CASHOME + '/lib/32'],
-                    define_macros = [('POSIX','1')])
+                   sources=['native/pycentera.c'],
+                   include_dirs=[CASHOME + '/include'],
+                   libraries=libraries[bitsize],
+                   library_dirs=[os.path.join(CASHOME, 'lib', bitsize)],
+                   extra_compile_args=extra_compile_args[bitsize],
+                   define_macros=[('POSIX', '1')])
 
-setup (name = 'Filepool',
-       version = '1.0',
-       author = 'Stephen Hu',
-       author_email = 'hu_stephen@emc.com',
-       description = 'This is a centera binding.',
-       packages = [ "Filepool" ],
-       ext_modules = [native] )
+setup(name='Filepool',
+      version='1.0',
+      author='Stephen Hu',
+      author_email='hu_stephen@emc.com',
+      description='This is a centera binding.',
+      packages=["Filepool"],
+      ext_modules=[native])

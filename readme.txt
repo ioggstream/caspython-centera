@@ -86,7 +86,7 @@ SDK path.
 4)  Run the setup.py script in the src directory to install and compile the Python 
 wrapper code.
 
-  python setup.py install
+  sudo CENTERA_HOME=/usr/local/Centera python setup.py install
 
 
 
