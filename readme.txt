@@ -1,0 +1,99 @@
+#########################################################################
+#
+#  Copyright (c) 2006 EMC Corporation. All Rights Reserved
+#
+#  This file is part of Python wrapper for the Centera SDK.
+#
+#  Python wrapper is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation version 2.
+#
+#  In addition to the permissions granted in the GNU General Public
+#  License version 2, EMC Corporation gives you unlimited permission
+#  to link the compiled version of this file into combinations with
+#  other programs, and to distribute those combinations without any
+#  restriction coming from the use of this file. (The General Public
+#  License restrictions do apply in other respects; for example,
+#  they cover modification of the file, and distribution when not
+#  linked into a combined executable.)
+#
+#  Python wrapper is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#  General Public License version 2 for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  version 2 along with Python wrapper; see the file COPYING. If not,
+#  write to:
+#
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
+#   80 South Street
+#   1/W-1
+#   Hopkinton, MA 01748
+#   USA
+#
+#########################################################################
+
+
+
+Introduction
+
+Python's simplicity, portability, and excellent library support makes development of
+applications very quick and easy.  The Python wrapper allows developers to access
+Centera SDK functions in a native manner and utilize the object-oriented and rich
+library capabilities of the language.
+
+
+
+Architecture
+
+The Python wrapper uses a C extension module to provide bindings into the Centera C
+SDK.  These native C function calls are then encapsulated within an object oriented
+class as a Python library.
+
+
+
+General Prerequisites
+
++ Must be run on a supported Centera SDK platform (Centera SDK must be installed).
++ Centera SDK 3.1 or above.
++ Python Interpreter 2.4 or above.
+
+Windows Prerequisites
+
++ the SDK .NET Framework SDK needs to be installed before building extensions for
+Python.
+
+
+Installation
+
+1)  Place all Centera SDK shared libraries in the python customized package
+directory.
+
+  e.g. /usr/local/lib/python2.4/site-packages
+
+2)  Save the Python wrapper source package in a local directory on the system.
+
+  e.g. tar zxvvf python-cas-sdk-wrapper-0.1.tar.gz
+
+3)  Define CENTERA_HOME environment variable to point to your top level Centera
+SDK path.
+
+  e.g. export CENTERA_HOME=/usr/local/Centera (linux)
+  e.g. set CENTERA_HOME=c:\Centera (windows)
+
+4)  Run the setup.py script in the src directory to install and compile the Python 
+wrapper code.
+
+  python setup.py install
+
+
+
+Uninstallation
+
+1)  Remove the following files/folders from the Python customized package directory:
+
+  a)  Remove Filepool directory
+  b)  Remove FPNative.so
+
