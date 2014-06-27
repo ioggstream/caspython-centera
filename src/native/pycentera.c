@@ -1218,13 +1218,15 @@ static PyObject *clip_get_description_attribute_index( PyObject *self, PyObject 
   const FPClipRef			clip;
   const FPInt			    index;
   char			           attr_name[MAX_NAME_LEN];
-  FPInt			           name_length;
+  FPInt			           name_length = MAX_NAME_LEN;
   char			           attr_value[MAX_NAME_LEN];
-  FPInt			           value_length;
+  FPInt			           value_length = MAX_NAME_LEN;
+  memset(attr_name, 0, MAX_NAME_LEN);
+  memset(attr_value, 0, MAX_NAME_LEN);
 
   PyObject                 *list			= NULL;
 
-  if( !PyArg_ParseTuple( args, "Ls", &clip, &index ) ) {
+  if( !PyArg_ParseTuple( args, "Li", &clip, &index ) ) {
     return NULL;
   }
 
@@ -1502,7 +1504,8 @@ static PyObject *tag_get_tag_name( PyObject *self, PyObject *args ) {
 
   const FPTagRef	tag;
   char			name[MAX_NAME_LEN];
-  FPInt			length;
+  FPInt			length = MAX_NAME_LEN;
+  memset(name, 0, MAX_NAME_LEN);
 
   if( !PyArg_ParseTuple( args, "L", &tag ) ) {
     return NULL;
