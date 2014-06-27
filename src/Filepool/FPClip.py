@@ -349,7 +349,7 @@ class FPClip(FPLibrary):
   def getDescriptionAttributeIndex( self, index ):
 
     value = FPNative.clip_get_description_attribute_index( self.handle, \
-      attribute )
+      index)
     self.check_error()
 
     return value
