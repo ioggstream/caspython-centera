@@ -1,4 +1,4 @@
-########################################################################
+#########################################################################
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -64,7 +64,7 @@ native = Extension('FPNative',
                    define_macros=[('POSIX', '1')])
 
 setup(name='Filepool',
-      version='1.0',
+      version='1.1',
       author='Stephen Hu',
       author_email='hu_stephen@emc.com',
       description='This is a centera binding.',
