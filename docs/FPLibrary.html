@@ -1,0 +1,423 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module FPLibrary</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>FPLibrary</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/hu/python-wrapper/src/Filepool/FPLibrary.py">/home/hu/python-wrapper/src/Filepool/FPLibrary.py</a></font></td></tr></table>
+    <p><tt>#########################################################################<br>
+#<br>
+#&nbsp;&nbsp;Copyright&nbsp;(c)&nbsp;2006&nbsp;EMC&nbsp;Corporation.&nbsp;All&nbsp;Rights&nbsp;Reserved<br>
+#<br>
+#&nbsp;&nbsp;This&nbsp;file&nbsp;is&nbsp;part&nbsp;of&nbsp;Python&nbsp;wrapper&nbsp;for&nbsp;the&nbsp;Centera&nbsp;SDK.<br>
+#<br>
+#&nbsp;&nbsp;Python&nbsp;wrapper&nbsp;is&nbsp;free&nbsp;software;&nbsp;you&nbsp;can&nbsp;redistribute&nbsp;it&nbsp;and/or<br>
+#&nbsp;&nbsp;modify&nbsp;it&nbsp;under&nbsp;the&nbsp;terms&nbsp;of&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public&nbsp;License&nbsp;as<br>
+#&nbsp;&nbsp;published&nbsp;by&nbsp;the&nbsp;Free&nbsp;Software&nbsp;Foundation&nbsp;version&nbsp;2.<br>
+#<br>
+#&nbsp;&nbsp;In&nbsp;addition&nbsp;to&nbsp;the&nbsp;permissions&nbsp;granted&nbsp;in&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public<br>
+#&nbsp;&nbsp;License&nbsp;version&nbsp;2,&nbsp;EMC&nbsp;Corporation&nbsp;gives&nbsp;you&nbsp;unlimited&nbsp;permission<br>
+#&nbsp;&nbsp;to&nbsp;link&nbsp;the&nbsp;compiled&nbsp;version&nbsp;of&nbsp;this&nbsp;file&nbsp;into&nbsp;combinations&nbsp;with<br>
+#&nbsp;&nbsp;other&nbsp;programs,&nbsp;and&nbsp;to&nbsp;distribute&nbsp;those&nbsp;combinations&nbsp;without&nbsp;any<br>
+#&nbsp;&nbsp;restriction&nbsp;coming&nbsp;from&nbsp;the&nbsp;use&nbsp;of&nbsp;this&nbsp;file.&nbsp;(The&nbsp;General&nbsp;Public<br>
+#&nbsp;&nbsp;License&nbsp;restrictions&nbsp;do&nbsp;apply&nbsp;in&nbsp;other&nbsp;respects;&nbsp;for&nbsp;example,<br>
+#&nbsp;&nbsp;they&nbsp;cover&nbsp;modification&nbsp;of&nbsp;the&nbsp;file,&nbsp;and&nbsp;distribution&nbsp;when&nbsp;not<br>
+#&nbsp;&nbsp;linked&nbsp;into&nbsp;a&nbsp;combined&nbsp;executable.)<br>
+#<br>
+#&nbsp;&nbsp;Python&nbsp;wrapper&nbsp;is&nbsp;distributed&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;will&nbsp;be&nbsp;useful,<br>
+#&nbsp;&nbsp;but&nbsp;WITHOUT&nbsp;ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nbsp;of<br>
+#&nbsp;&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.&nbsp;See&nbsp;the&nbsp;GNU<br>
+#&nbsp;&nbsp;General&nbsp;Public&nbsp;License&nbsp;version&nbsp;2&nbsp;for&nbsp;more&nbsp;details.<br>
+#<br>
+#&nbsp;&nbsp;You&nbsp;should&nbsp;have&nbsp;received&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public&nbsp;License<br>
+#&nbsp;&nbsp;version&nbsp;2&nbsp;along&nbsp;with&nbsp;Python&nbsp;wrapper;&nbsp;see&nbsp;the&nbsp;file&nbsp;COPYING.&nbsp;If&nbsp;not,<br>
+#&nbsp;&nbsp;write&nbsp;to:<br>
+#<br>
+#&nbsp;&nbsp;&nbsp;EMC&nbsp;Corporation&nbsp;<br>
+#&nbsp;&nbsp;&nbsp;Centera&nbsp;Open&nbsp;Source&nbsp;Intiative&nbsp;(COSI)&nbsp;<br>
+#&nbsp;&nbsp;&nbsp;80&nbsp;South&nbsp;Street<br>
+#&nbsp;&nbsp;&nbsp;1/W-1<br>
+#&nbsp;&nbsp;&nbsp;Hopkinton,&nbsp;MA&nbsp;01748&nbsp;<br>
+#&nbsp;&nbsp;&nbsp;USA<br>
+#<br>
+#########################################################################</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="FPNative.html">FPNative</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="FPLibrary.html#FPLibrary">FPLibrary</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FPLibrary">class <strong>FPLibrary</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FPLibrary-check_error"><strong>check_error</strong></a>(self)</dt></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>FPPOOL_INFO_VERSION</strong> = 2</dl>
+
+<dl><dt><strong>FP_ALLOWED</strong> = 'allowed'</dl>
+
+<dl><dt><strong>FP_ALLOWED_W</strong> = u'allowed'</dl>
+
+<dl><dt><strong>FP_ALL_CLUSTERS</strong> = 3</dl>
+
+<dl><dt><strong>FP_BLOBNAMING</strong> = 'blobnaming'</dl>
+
+<dl><dt><strong>FP_BLOBNAMING_W</strong> = u'blobnaming'</dl>
+
+<dl><dt><strong>FP_CLIENT_ERROR</strong> = 3</dl>
+
+<dl><dt><strong>FP_CLIPENUMERATION</strong> = 'clip-enumeration'</dl>
+
+<dl><dt><strong>FP_CLIPENUMERATION_W</strong> = u'clip-enumeration'</dl>
+
+<dl><dt><strong>FP_COMPLIANCE</strong> = 'compliance'</dl>
+
+<dl><dt><strong>FP_COMPLIANCE_W</strong> = u'compliance'</dl>
+
+<dl><dt><strong>FP_DEFAULT</strong> = 'default'</dl>
+
+<dl><dt><strong>FP_DEFAULT_RETENTION_PERIOD</strong> = -2</dl>
+
+<dl><dt><strong>FP_DEFAULT_W</strong> = u'default'</dl>
+
+<dl><dt><strong>FP_DELETE</strong> = 'delete'</dl>
+
+<dl><dt><strong>FP_DELETE_W</strong> = u'delete'</dl>
+
+<dl><dt><strong>FP_DELETIONLOGGING</strong> = 'deletionlogging'</dl>
+
+<dl><dt><strong>FP_DELETIONLOGGING_W</strong> = u'deletionlogging'</dl>
+
+<dl><dt><strong>FP_DUPLICATEDETECTION</strong> = 'duplicate-detection'</dl>
+
+<dl><dt><strong>FP_DUPLICATEDETECTION_W</strong> = u'duplicate-detection'</dl>
+
+<dl><dt><strong>FP_EVENT_BASED_RETENTION</strong> = 'ebr'</dl>
+
+<dl><dt><strong>FP_EVENT_BASED_RETENTION_W</strong> = u'ebr'</dl>
+
+<dl><dt><strong>FP_EXIST</strong> = 'exist'</dl>
+
+<dl><dt><strong>FP_EXIST_W</strong> = u'exist'</dl>
+
+<dl><dt><strong>FP_FAILOVER_STRATEGY</strong> = 1</dl>
+
+<dl><dt><strong>FP_FALSE</strong> = 'false'</dl>
+
+<dl><dt><strong>FP_FALSE_W</strong> = u'false'</dl>
+
+<dl><dt><strong>FP_FIXED_RETENTION_MAX</strong> = 'fixedmaximum'</dl>
+
+<dl><dt><strong>FP_FIXED_RETENTION_MAX_W</strong> = u'fixedmaximum'</dl>
+
+<dl><dt><strong>FP_FIXED_RETENTION_MIN</strong> = 'fixedminimum'</dl>
+
+<dl><dt><strong>FP_FIXED_RETENTION_MIN_W</strong> = u'fixedminimum'</dl>
+
+<dl><dt><strong>FP_GENERAL_ERROR</strong> = 0</dl>
+
+<dl><dt><strong>FP_INFINITE_RETENTION_PERIOD</strong> = -1</dl>
+
+<dl><dt><strong>FP_LAZY_OPEN</strong> = 1</dl>
+
+<dl><dt><strong>FP_LOGGING_COMPONENT_ALL</strong> = 4294967039L</dl>
+
+<dl><dt><strong>FP_LOGGING_DEFAULT</strong> = 1</dl>
+
+<dl><dt><strong>FP_LOGGING_LEVEL_ERROR</strong> = 1</dl>
+
+<dl><dt><strong>FP_LOGGING_LEVEL_LOG</strong> = 3</dl>
+
+<dl><dt><strong>FP_LOGGING_LEVEL_WARN</strong> = 2</dl>
+
+<dl><dt><strong>FP_LOGGING_LOGFORMAT_TAB</strong> = 1</dl>
+
+<dl><dt><strong>FP_LOGGING_LOGFORMAT_XML</strong> = 0</dl>
+
+<dl><dt><strong>FP_LOGGING_LOGKEEP_APPEND</strong> = 256</dl>
+
+<dl><dt><strong>FP_LOGGING_LOGKEEP_CREATE</strong> = 512</dl>
+
+<dl><dt><strong>FP_LOGGING_LOGKEEP_OVERWRITE</strong> = 0</dl>
+
+<dl><dt><strong>FP_MD5</strong> = 'MD5'</dl>
+
+<dl><dt><strong>FP_MD5_W</strong> = u'MD5'</dl>
+
+<dl><dt><strong>FP_MG</strong> = 'MG'</dl>
+
+<dl><dt><strong>FP_MG_W</strong> = u'MG'</dl>
+
+<dl><dt><strong>FP_MODE</strong> = 'mode'</dl>
+
+<dl><dt><strong>FP_MODE_W</strong> = u'mode'</dl>
+
+<dl><dt><strong>FP_MONITOR</strong> = 'monitor'</dl>
+
+<dl><dt><strong>FP_MONITOR_W</strong> = u'monitor'</dl>
+
+<dl><dt><strong>FP_NETWORK_ERROR</strong> = 1</dl>
+
+<dl><dt><strong>FP_NORMAL_OPEN</strong> = 0</dl>
+
+<dl><dt><strong>FP_NO_REPLICA_CLUSTERS</strong> = 2</dl>
+
+<dl><dt><strong>FP_NO_RETENTION_PERIOD</strong> = 0</dl>
+
+<dl><dt><strong>FP_NO_STRATEGY</strong> = 0</dl>
+
+<dl><dt><strong>FP_OPEN_ASTREE</strong> = 1</dl>
+
+<dl><dt><strong>FP_OPEN_FLAT</strong> = 2</dl>
+
+<dl><dt><strong>FP_OPTION_BUFFERSIZE</strong> = 'buffersize'</dl>
+
+<dl><dt><strong>FP_OPTION_BUFFERSIZE_W</strong> = u'buffersize'</dl>
+
+<dl><dt><strong>FP_OPTION_CALCID_MASK</strong> = 15</dl>
+
+<dl><dt><strong>FP_OPTION_CALCID_NOCHECK</strong> = 16</dl>
+
+<dl><dt><strong>FP_OPTION_CLIENT_CALCID</strong> = 1</dl>
+
+<dl><dt><strong>FP_OPTION_CLIENT_CALCID_STREAMING</strong> = 2</dl>
+
+<dl><dt><strong>FP_OPTION_CLUSTER_NON_AVAIL_TIME</strong> = 'clusternonavailtime'</dl>
+
+<dl><dt><strong>FP_OPTION_CLUSTER_NON_AVAIL_TIME_W</strong> = u'clusternonavailtime'</dl>
+
+<dl><dt><strong>FP_OPTION_COPY_BLOBDATA</strong> = 1</dl>
+
+<dl><dt><strong>FP_OPTION_COPY_CHILDREN</strong> = 2</dl>
+
+<dl><dt><strong>FP_OPTION_DEFAULT_COLLISION_AVOIDANCE</strong> = 'collisionavoidance'</dl>
+
+<dl><dt><strong>FP_OPTION_DEFAULT_COLLISION_AVOIDANCE_W</strong> = u'collisionavoidance'</dl>
+
+<dl><dt><strong>FP_OPTION_DEFAULT_OPTIONS</strong> = 0</dl>
+
+<dl><dt><strong>FP_OPTION_DELETE_PRIVILEGED</strong> = 1</dl>
+
+<dl><dt><strong>FP_OPTION_DISABLE_COLLISION_AVOIDANCE</strong> = 128</dl>
+
+<dl><dt><strong>FP_OPTION_EMBEDDED_DATA_MAX_SIZE</strong> = 102400</dl>
+
+<dl><dt><strong>FP_OPTION_EMBEDDED_DATA_THRESHOLD</strong> = 'embedding_threshold'</dl>
+
+<dl><dt><strong>FP_OPTION_EMBEDDED_DATA_THRESHOLD_W</strong> = u'embedding_threshold'</dl>
+
+<dl><dt><strong>FP_OPTION_EMBED_DATA</strong> = 256</dl>
+
+<dl><dt><strong>FP_OPTION_ENABLE_COLLISION_AVOIDANCE</strong> = 64</dl>
+
+<dl><dt><strong>FP_OPTION_ENABLE_DUPLICATE_DETECTION</strong> = 32</dl>
+
+<dl><dt><strong>FP_OPTION_ENABLE_MULTICLUSTER_FAILOVER</strong> = 'multiclusterfailover'</dl>
+
+<dl><dt><strong>FP_OPTION_ENABLE_MULTICLUSTER_FAILOVER_W</strong> = u'multiclusterfailover'</dl>
+
+<dl><dt><strong>FP_OPTION_LINK_DATA</strong> = 512</dl>
+
+<dl><dt><strong>FP_OPTION_MAXCONNECTIONS</strong> = 'maxconnections'</dl>
+
+<dl><dt><strong>FP_OPTION_MAXCONNECTIONS_W</strong> = u'maxconnections'</dl>
+
+<dl><dt><strong>FP_OPTION_MILLISECONDS_STRING</strong> = 1</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_DELETE_CLUSTERS</strong> = 'multicluster_delete_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_DELETE_CLUSTERS_W</strong> = u'multicluster_delete_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_DELETE_STRATEGY</strong> = 'multicluster_delete_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_DELETE_STRATEGY_W</strong> = u'multicluster_delete_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_EXISTS_CLUSTERS</strong> = 'multicluster_exists_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_EXISTS_CLUSTERS_W</strong> = u'multicluster_exists_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_EXISTS_STRATEGY</strong> = 'multicluster_exists_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_EXISTS_STRATEGY_W</strong> = u'multicluster_exists_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_QUERY_CLUSTERS</strong> = 'multicluster_query_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_QUERY_CLUSTERS_W</strong> = u'multicluster_query_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_QUERY_STRATEGY</strong> = 'multicluster_query_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_QUERY_STRATEGY_W</strong> = u'multicluster_query_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_READ_CLUSTERS</strong> = 'multicluster_read_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_READ_CLUSTERS_W</strong> = u'multicluster_read_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_READ_STRATEGY</strong> = 'multicluster_read_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_READ_STRATEGY_W</strong> = u'multicluster_read_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_WRITE_CLUSTERS</strong> = 'multicluster_write_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_WRITE_CLUSTERS_W</strong> = u'multicluster_write_clusters'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_WRITE_STRATEGY</strong> = 'multicluster_write_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_MULTICLUSTER_WRITE_STRATEGY_W</strong> = u'multicluster_write_strategy'</dl>
+
+<dl><dt><strong>FP_OPTION_NO_COPY_OPTIONS</strong> = 0</dl>
+
+<dl><dt><strong>FP_OPTION_OPENSTRATEGY</strong> = 'openstrategy'</dl>
+
+<dl><dt><strong>FP_OPTION_OPENSTRATEGY_W</strong> = u'openstrategy'</dl>
+
+<dl><dt><strong>FP_OPTION_PREFETCH_SIZE</strong> = 'prefetchsize'</dl>
+
+<dl><dt><strong>FP_OPTION_PREFETCH_SIZE_W</strong> = u'prefetchsize'</dl>
+
+<dl><dt><strong>FP_OPTION_PROBE_LIMIT</strong> = 'probetimelimit'</dl>
+
+<dl><dt><strong>FP_OPTION_PROBE_LIMIT_W</strong> = u'probetimelimit'</dl>
+
+<dl><dt><strong>FP_OPTION_RETRYCOUNT</strong> = 'retrycount'</dl>
+
+<dl><dt><strong>FP_OPTION_RETRYCOUNT_W</strong> = u'retrycount'</dl>
+
+<dl><dt><strong>FP_OPTION_RETRYSLEEP</strong> = 'retrysleep'</dl>
+
+<dl><dt><strong>FP_OPTION_RETRYSLEEP_W</strong> = u'retrysleep'</dl>
+
+<dl><dt><strong>FP_OPTION_SECONDS_STRING</strong> = 0</dl>
+
+<dl><dt><strong>FP_OPTION_SERVER_CALCID_STREAMING</strong> = 3</dl>
+
+<dl><dt><strong>FP_OPTION_TIMEOUT</strong> = 'timeout'</dl>
+
+<dl><dt><strong>FP_OPTION_TIMEOUT_W</strong> = u'timeout'</dl>
+
+<dl><dt><strong>FP_POOLS</strong> = 'pools'</dl>
+
+<dl><dt><strong>FP_POOLS_W</strong> = u'pools'</dl>
+
+<dl><dt><strong>FP_POOL_POOLMAPPINGS</strong> = 'poolmappings'</dl>
+
+<dl><dt><strong>FP_POOL_POOLMAPPINGS_W</strong> = u'poolmappings'</dl>
+
+<dl><dt><strong>FP_PRIMARY_AND_PRIMARY_REPLICA_CLUSTER_ONLY</strong> = 1</dl>
+
+<dl><dt><strong>FP_PRIMARY_ONLY</strong> = 0</dl>
+
+<dl><dt><strong>FP_PRIVILEGEDDELETE</strong> = 'privileged-delete'</dl>
+
+<dl><dt><strong>FP_PRIVILEGEDDELETE_W</strong> = u'privileged-delete'</dl>
+
+<dl><dt><strong>FP_PROFILES</strong> = 'profiles'</dl>
+
+<dl><dt><strong>FP_PROFILES_W</strong> = u'profiles'</dl>
+
+<dl><dt><strong>FP_PURGE</strong> = 'purge'</dl>
+
+<dl><dt><strong>FP_PURGE_W</strong> = u'purge'</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_ABORT</strong> = 4</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_COMPLETE</strong> = 2</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_END</strong> = 3</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_ERROR</strong> = -1</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_INCOMPLETE</strong> = 1</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_OK</strong> = 0</dl>
+
+<dl><dt><strong>FP_QUERY_RESULT_CODE_PROGRESS</strong> = 99</dl>
+
+<dl><dt><strong>FP_QUERY_TYPE_DELETED</strong> = 2</dl>
+
+<dl><dt><strong>FP_QUERY_TYPE_EXISTING</strong> = 1</dl>
+
+<dl><dt><strong>FP_READ</strong> = 'read'</dl>
+
+<dl><dt><strong>FP_READ_W</strong> = u'read'</dl>
+
+<dl><dt><strong>FP_REPLICATION_STRATEGY</strong> = 2</dl>
+
+<dl><dt><strong>FP_RETENTION</strong> = 'retention'</dl>
+
+<dl><dt><strong>FP_RETENTION_DEFAULT</strong> = 'default'</dl>
+
+<dl><dt><strong>FP_RETENTION_DEFAULT_W</strong> = u'default'</dl>
+
+<dl><dt><strong>FP_RETENTION_HOLD</strong> = 'retention-hold'</dl>
+
+<dl><dt><strong>FP_RETENTION_HOLD_W</strong> = u'retention-hold'</dl>
+
+<dl><dt><strong>FP_RETENTION_MIN_MAX</strong> = 'min-max'</dl>
+
+<dl><dt><strong>FP_RETENTION_MIN_MAX_W</strong> = u'min-max'</dl>
+
+<dl><dt><strong>FP_RETENTION_W</strong> = u'retention'</dl>
+
+<dl><dt><strong>FP_SERVER_ERROR</strong> = 2</dl>
+
+<dl><dt><strong>FP_SUPPORTED</strong> = 'supported'</dl>
+
+<dl><dt><strong>FP_SUPPORTED_SCHEMES</strong> = 'supported-schemes'</dl>
+
+<dl><dt><strong>FP_SUPPORTED_SCHEMES_W</strong> = u'supported-schemes'</dl>
+
+<dl><dt><strong>FP_SUPPORTED_W</strong> = u'supported'</dl>
+
+<dl><dt><strong>FP_TRUE</strong> = 'true'</dl>
+
+<dl><dt><strong>FP_TRUE_W</strong> = u'true'</dl>
+
+<dl><dt><strong>FP_UNSUPPORTED</strong> = 'unsupported'</dl>
+
+<dl><dt><strong>FP_UNSUPPORTED_W</strong> = u'unsupported'</dl>
+
+<dl><dt><strong>FP_VALUE</strong> = 'value'</dl>
+
+<dl><dt><strong>FP_VALUE_W</strong> = u'value'</dl>
+
+<dl><dt><strong>FP_VARIABLE_RETENTION_MAX</strong> = 'variablemaximum'</dl>
+
+<dl><dt><strong>FP_VARIABLE_RETENTION_MAX_W</strong> = u'variablemaximum'</dl>
+
+<dl><dt><strong>FP_VARIABLE_RETENTION_MIN</strong> = 'variableminimum'</dl>
+
+<dl><dt><strong>FP_VARIABLE_RETENTION_MIN_W</strong> = u'variableminimum'</dl>
+
+<dl><dt><strong>FP_VERSION_FPLIBRARY_DLL</strong> = 1</dl>
+
+<dl><dt><strong>FP_VERSION_FPLIBRARY_JAR</strong> = 2</dl>
+
+<dl><dt><strong>FP_WRITE</strong> = 'write'</dl>
+
+<dl><dt><strong>FP_WRITE_W</strong> = u'write'</dl>
+
+</td></tr></table></td></tr></table>
+</body></html>
