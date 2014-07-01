@@ -66,6 +66,7 @@ Windows Prerequisites
 Python.
 
 
+
 Installation
 
 1)  Place all Centera SDK shared libraries in the python customized package
@@ -96,4 +97,17 @@ Uninstallation
 
   a)  Remove Filepool directory
   b)  Remove FPNative.so
+
+
+
+Developing
+
+1) Setup the enviroment for using the local build
+export CENTERA_HOME=/usr/local/Centera
+export PYTHONPATH+=:$(echo $PWD/src/build/lib.*)
+cd src && python setup.py build; cd -
+
+2) Set your test environment
+export CENTERA_PEA_LOCATION=$PWD/stage_pool.pea
+nosetest -v -w test
 
