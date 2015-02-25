@@ -1,7 +1,14 @@
+"""
+    License: GPL2
+    Author: roberto.polli@babel.it
+"""
+import logging
+log = logging.getLogger("centera.test")
 from Filepool.FPPool import FPPool
 from Filepool.FPLibrary import FPLibrary
-pool_ip = "192.168.0.1"
-clipid = "97PM8IPQE1IQAeFMB3ED6RGLDDHG418DHCIKO90P1GND50REQ4J0S"
+pool_ip = "192.168.26.7"
+clipid = "87PM8IPQE1IQAeFMB3ED6RGLDDHG418DHCIKO90P1GND50REQ4J0S"
+
 """
 except FPClientException, c:
   print c

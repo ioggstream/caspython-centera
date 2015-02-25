@@ -35,7 +35,9 @@
 #
 #########################################################################
 
-import sys, traceback
+import sys, traceback, time
+sys.path.append("/home/legrec/legacyrecorder-python-api/caspython/src/build/lib.linux-x86_64-2.7")
+
 
 from Filepool.FPLibrary import FPLibrary
 from Filepool.FPPool import FPPool
@@ -52,57 +54,43 @@ from Filepool.FPQuery import FPQuery
 from Filepool.FPQueryExpression import FPQueryExpression
 from Filepool.FPQueryResult import FPQueryResult
 
-try:
 
-  ip = raw_input( "Pool address: " )
+
+try:
+  sec_in_day = 86400
+  ip = "192.168.26.7" # raw_input( "Pool address: " )
 
   pool = FPPool( ip )
-
   queryExpression = FPQueryExpression()
-
   queryExpression.setType( FPLibrary.FP_QUERY_TYPE_EXISTING )
-
-  queryExpression.setStartTime( 352352000 )
+  # 1371735529
+  ts = int( time.time() - 15*sec_in_day) # 
+  queryExpression.setStartTime(ts)
   
   query = FPQuery( pool )
-
   query.open( queryExpression )
-
   queryExpression.close()
 
   status = 0
-
-
-  while(1):
+  while True:
 
     res = FPQueryResult(query.fetchResult(0))
-
     status = res.getResultCode()
 
-    if( status == FPLibrary.FP_QUERY_RESULT_CODE_END ):
-      break
-
-    elif( status == FPLibrary.FP_QUERY_RESULT_CODE_PROGRESS ):
-      continue
-
-    elif( status == FPLibrary.FP_QUERY_RESULT_CODE_ABORT ):
-      break
-
-    elif( status == FPLibrary.FP_QUERY_RESULT_CODE_ERROR ):
-      break
-
-    elif( status == FPLibrary.FP_QUERY_RESULT_CODE_INCOMPLETE ):
-      break
-
-    elif( status == FPLibrary.FP_QUERY_RESULT_CODE_COMPLETE ):
-      break
-
-    elif( status == FPLibrary.FP_QUERY_RESULT_CODE_OK ):
-      print res.getClipId()
-
+    if status in (
+        FPLibrary.FP_QUERY_RESULT_CODE_END,
+        FPLibrary.FP_QUERY_RESULT_CODE_ABORT,
+        FPLibrary.FP_QUERY_RESULT_CODE_ERROR,
+        FPLibrary.FP_QUERY_RESULT_CODE_INCOMPLETE,
+        FPLibrary.FP_QUERY_RESULT_CODE_COMPLETE
+    ):
+        break
+    elif status == FPLibrary.FP_QUERY_RESULT_CODE_PROGRESS:
+        continue
+    elif status == FPLibrary.FP_QUERY_RESULT_CODE_OK:
+        print res.getClipId()
 
   query.close()
-
   pool.close()
 
   

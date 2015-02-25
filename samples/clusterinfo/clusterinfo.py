@@ -48,121 +48,55 @@ from Filepool.FPTag import FPTag
 from Filepool.FPFileInputStream import FPFileInputStream
 from Filepool.FPBufferInputStream import FPBufferInputStream
 from Filepool.FPRetention import FPRetention
+from sys import argv
 
 try:
-
-  ip = raw_input( "Pool address: " )
+  try:
+    ip = argv[1]
+  except IndexError:
+    ip = raw_input( "Pool address: " )
 
   pool = FPPool( ip )
 
   pool.getPoolInfo()
 
-  print "Cluster ID:\n"
-  print "\t" + pool.clusterid + "\n"
+  print "Cluster ID\t" + pool.clusterid 
+  print "Cluster Name\t" + pool.clusterName 
+  print "Pool Info Version\t" + str(pool.infoVersion) 
+  print "CentraStar Version\t" + pool.version 
+  print "Cluster Capacity\t" + str(pool.capacity) 
+  print "Cluster Free Space\t" + str(pool.freeSpace) 
+  print "Cluster Replica Address\t" + pool.replicaAddress 
+  print "Native SDK Library Version\t" + pool.getComponentVersion( FPLibrary.FP_VERSION_FPLIBRARY_DLL ) 
+  print "Cluster Time\t" + pool.getClusterTime() 
 
-  print "Cluster Name:\n"
-  print "\t" + pool.clusterName + "\n"
-
-  print "Pool Info Version:\n"
-  print "\t" + str(pool.infoVersion) + "\n"
-
-  print "CentraStar Version:\n"
-  print "\t" + pool.version + "\n"
-
-  print "Cluster Capacity:\n"
-  print "\t" + str(pool.capacity) + "\n"
-
-  print "Cluster Free Space:\n"
-  print "\t" + str(pool.freeSpace) + "\n"
-
-  print "Cluster Replica Address:\n"
-  print "\t" + pool.replicaAddress + "\n"
-
-  print "Native SDK Library Version:\n"
-  print "\t" + pool.getComponentVersion( 
-FPLibrary.FP_VERSION_FPLIBRARY_DLL ) + "\n"
-
-  print "Cluster Time:\n"
-  print "\t" + pool.getClusterTime() + "\n"
-
+  #
+  # Capabilities
+  # 
   print "Pool Capabilities:\n"
+  print "\tRead Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_READ, FPLibrary.FP_ALLOWED) 
+  print "\tWrite Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_WRITE, FPLibrary.FP_ALLOWED) 
+  print "\tDelete Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_DELETE, FPLibrary.FP_ALLOWED) 
+  print "\tPurge Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_PURGE, FPLibrary.FP_ALLOWED) 
+  print "\tPrivileged Delete Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_PRIVILEGEDDELETE, FPLibrary.FP_ALLOWED) 
+  print "\tExistence Checking Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_EXIST, FPLibrary.FP_ALLOWED) 
+  print "\tMonitor Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_MONITOR, FPLibrary.FP_ALLOWED) 
+  print "\tQuery Operation Allowed+\t" + pool.getCapability( FPLibrary.FP_CLIPENUMERATION, FPLibrary.FP_ALLOWED) 
+  print "\tDefault Retention Period+\t" + pool.getCapability( FPLibrary.FP_RETENTION, FPLibrary.FP_DEFAULT) 
+  print "\tEvent Based Retention Supported+\t" + pool.getCapability( FPLibrary.FP_COMPLIANCE, FPLibrary.FP_EVENT_BASED_RETENTION) 
+  print "\tRetention Hold Supported+\t" + pool.getCapability( FPLibrary.FP_COMPLIANCE, FPLibrary.FP_RETENTION_HOLD) 
+  print "\tDefault Blob Naming Scheme+\t" + pool.getCapability( FPLibrary.FP_BLOBNAMING, FPLibrary.FP_SUPPORTED_SCHEMES) 
+  print "\tDeletion logging enabled+\t" + pool.getCapability( FPLibrary.FP_DELETIONLOGGING, FPLibrary.FP_SUPPORTED) 
+  print "\tMin/Max Enabled+\t" + pool.getCapability( FPLibrary.FP_COMPLIANCE, FPLibrary.FP_RETENTION_MIN_MAX) 
+  print "\tRetention Variable Min+\t" + pool.getCapability( FPLibrary.FP_RETENTION, FPLibrary.FP_VARIABLE_RETENTION_MIN) 
+  print "\tRetention Variable Max+\t" + pool.getCapability( FPLibrary.FP_RETENTION, FPLibrary.FP_VARIABLE_RETENTION_MAX) 
+  print "\tRetention Fixed Min+\t" + pool.getCapability( FPLibrary.FP_RETENTION, FPLibrary.FP_FIXED_RETENTION_MIN) 
+  print "\tRetention Fixed Max+\t" + pool.getCapability( FPLibrary.FP_RETENTION, FPLibrary.FP_FIXED_RETENTION_MAX) 
+  print "\tRetention Default+\t" + pool.getCapability( FPLibrary.FP_RETENTION, FPLibrary.FP_RETENTION_DEFAULT) 
 
-  print "\tRead Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_READ, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tWrite Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_WRITE, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tDelete Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_DELETE, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tPurge Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_PURGE, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tPrivileged Delete Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_PRIVILEGEDDELETE, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tExistence Checking Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_EXIST, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tMonitor Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_MONITOR, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tQuery Operation Allowed:";
-  print "\t" + pool.getCapability( FPLibrary.FP_CLIPENUMERATION, 
-FPLibrary.FP_ALLOWED) + "\n"
-
-  print "\tDefault Retention Period:";
-  print "\t" + pool.getCapability( FPLibrary.FP_RETENTION, 
-FPLibrary.FP_DEFAULT) + "\n"
-
-  print "\tEvent Based Retention Supported:";
-  print "\t" + pool.getCapability( FPLibrary.FP_COMPLIANCE, 
-FPLibrary.FP_EVENT_BASED_RETENTION) + "\n"
-
-  print "\tRetention Hold Supported:";
-  print "\t" + pool.getCapability( FPLibrary.FP_COMPLIANCE, 
-FPLibrary.FP_RETENTION_HOLD) + "\n"
-
-  print "\tDefault Blob Naming Scheme:";
-  print "\t" + pool.getCapability( FPLibrary.FP_BLOBNAMING, 
-FPLibrary.FP_SUPPORTED_SCHEMES) + "\n"
-
-  print "\tDeletion logging enabled:";
-  print "\t" + pool.getCapability( FPLibrary.FP_DELETIONLOGGING, 
-FPLibrary.FP_SUPPORTED) + "\n"
-
-  print "\tMin/Max Enabled:";
-  print "\t" + pool.getCapability( FPLibrary.FP_COMPLIANCE, 
-FPLibrary.FP_RETENTION_MIN_MAX) + "\n"
-
-  print "\tRetention Variable Min:";
-  print "\t" + pool.getCapability( FPLibrary.FP_RETENTION, 
-FPLibrary.FP_VARIABLE_RETENTION_MIN) + "\n"
-
-  print "\tRetention Variable Max:";
-  print "\t" + pool.getCapability( FPLibrary.FP_RETENTION, 
-FPLibrary.FP_VARIABLE_RETENTION_MAX) + "\n"
-
-  print "\tRetention Fixed Min:";
-  print "\t" + pool.getCapability( FPLibrary.FP_RETENTION, 
-FPLibrary.FP_FIXED_RETENTION_MIN) + "\n"
-
-  print "\tRetention Fixed Max:";
-  print "\t" + pool.getCapability( FPLibrary.FP_RETENTION, 
-FPLibrary.FP_FIXED_RETENTION_MAX) + "\n"
-
-  print "\tRetention Default:";
-  print "\t" + pool.getCapability( FPLibrary.FP_RETENTION, 
-FPLibrary.FP_RETENTION_DEFAULT) + "\n"
-
+  #
+  # Retention Classes
+  #
   pool.openRetentionClassContext();
   r = pool.getNumRetentionClass();
 
@@ -191,34 +125,26 @@ FPLibrary.FP_RETENTION_DEFAULT) + "\n"
         rc = None
 
   print "\n"
-
   print "\tGlobal options:"
-
   print "\n"
 
-  print "\tMax pool connections:";
-  print "\t" + str(pool.getGlobalOption(
-    FPLibrary.FP_OPTION_MAXCONNECTIONS)) + "\n"
+  print "\tMax pool connections+\t" + str(pool.getGlobalOption(
+    FPLibrary.FP_OPTION_MAXCONNECTIONS)) 
 
-  print "\tRetry count:";
-  print "\t" + str(pool.getGlobalOption(
-    FPLibrary.FP_OPTION_RETRYCOUNT)) + "\n"
+  print "\tRetry count+\t" + str(pool.getGlobalOption(
+    FPLibrary.FP_OPTION_RETRYCOUNT)) 
 
-  print "\tSleep duration between retries:";
-  print "\t" + str(pool.getGlobalOption(
-    FPLibrary.FP_OPTION_RETRYSLEEP)) + "\n"
+  print "\tSleep duration between retries+\t" + str(pool.getGlobalOption(
+    FPLibrary.FP_OPTION_RETRYSLEEP)) 
 
-  print "\tCluster unavailable time:";
-  print "\t" + str(pool.getGlobalOption(
-    FPLibrary.FP_OPTION_CLUSTER_NON_AVAIL_TIME)) + "\n"
+  print "\tCluster unavailable time+\t" + str(pool.getGlobalOption(
+    FPLibrary.FP_OPTION_CLUSTER_NON_AVAIL_TIME)) 
 
-  print "\tEmbedded blob threshold (bytes):";
-  print "\t" + str(pool.getGlobalOption(
-    FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD)) + "\n"
+  print "\tEmbedded blob threshold (bytes)+\t" + str(pool.getGlobalOption(
+    FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD)) 
 
-  print "\tPool open strategy:";
-  print "\t" + str(pool.getGlobalOption(
-    FPLibrary.FP_OPTION_OPENSTRATEGY)) + "\n"
+  print "\tPool open strategy+\t" + str(pool.getGlobalOption(
+    FPLibrary.FP_OPTION_OPENSTRATEGY)) 
 
   print "\n"
 
@@ -226,73 +152,56 @@ FPLibrary.FP_RETENTION_DEFAULT) + "\n"
 
   print "\n"
 
-  print "\tBuffersize:";
-  print "\t" + str(pool.getIntOption(
-    FPLibrary.FP_OPTION_BUFFERSIZE )) + "\n"
+  print "\tBuffersize+\t" + str(pool.getIntOption(
+    FPLibrary.FP_OPTION_BUFFERSIZE )) 
 
-  print "\tPool connection timeout::";
-  print "\t" + str(pool.getIntOption(
-    FPLibrary.FP_OPTION_TIMEOUT )) + "\n"
+  print "\tPool connection timeout:+\t" + str(pool.getIntOption(
+    FPLibrary.FP_OPTION_TIMEOUT )) 
 
   cluster_failover = pool.getIntOption(
     FPLibrary.FP_OPTION_ENABLE_MULTICLUSTER_FAILOVER )
 
-  print "\tMulticluster failover enabled: "
+  print "\tMulticluster failover enabled:\t %r" % bool(cluster_failover == 1) 
 
-  if( cluster_failover == 1 ):
-    print "\tTrue"
+  if cluster_failover == 1:
 
-    print "\t\tRead failover strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_READ_STRATEGY )) + "\n"
+    print "\t\tRead failover strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_READ_STRATEGY )) 
 
-    print "\t\tRead cluster strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_READ_CLUSTERS )) + "\n"
+    print "\t\tRead cluster strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_READ_CLUSTERS )) 
 
-    print "\t\tWrite failover strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_WRITE_STRATEGY )) + "\n"
+    print "\t\tWrite failover strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_WRITE_STRATEGY )) 
 
-    print "\t\tWrite cluster strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_WRITE_CLUSTERS )) + "\n"
+    print "\t\tWrite cluster strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_WRITE_CLUSTERS )) 
 
-    print "\t\tDelete failover strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_DELETE_STRATEGY )) + "\n"
+    print "\t\tDelete failover strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_DELETE_STRATEGY )) 
 
-    print "\t\tDelete cluster strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_DELETE_CLUSTERS )) + "\n"
+    print "\t\tDelete cluster strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_DELETE_CLUSTERS )) 
 
-    print "\t\tExists failover strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_EXISTS_STRATEGY )) + "\n"
+    print "\t\tExists failover strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_EXISTS_STRATEGY )) 
 
-    print "\t\tExists cluster strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_EXISTS_CLUSTERS )) + "\n"
+    print "\t\tExists cluster strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_EXISTS_CLUSTERS )) 
 
-    print "\t\tQuery failover strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_QUERY_STRATEGY )) + "\n"
+    print "\t\tQuery failover strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_QUERY_STRATEGY )) 
 
-    print "\t\tQuery cluster strategy:";
-    print "\t\t" + str(pool.getGlobalOption(
-      FPLibrary.FP_OPTION_MULTICLUSTER_QUERY_CLUSTERS )) + "\n"
+    print "\t\tQuery cluster strategy+\t\t" + str(pool.getGlobalOption(
+      FPLibrary.FP_OPTION_MULTICLUSTER_QUERY_CLUSTERS )) 
 
 
   else:
     print "\tFalse"
 
-  print "\tCollision avoidance enabled:";
-  print "\t" + str(pool.getIntOption(
-    FPLibrary.FP_OPTION_DEFAULT_COLLISION_AVOIDANCE )) + "\n"
+  print "\tCollision avoidance enabled+\t" + str(pool.getIntOption( FPLibrary.FP_OPTION_DEFAULT_COLLISION_AVOIDANCE )) 
 
-  print "\tPrefetch buffer size:";
-  print "\t" + str(pool.getIntOption(
-    FPLibrary.FP_OPTION_PREFETCH_SIZE )) + "\n"
+  print "\tPrefetch buffer size+\t" + str(pool.getIntOption( FPLibrary.FP_OPTION_PREFETCH_SIZE )) 
 
 
 

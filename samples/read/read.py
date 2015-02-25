@@ -37,48 +37,79 @@
 
 import sys, traceback
 
-from Filepool.FPLibrary import FPLibrary
-from Filepool.FPPool import FPPool
-from Filepool.FPException import FPException
-from Filepool.FPNetException import FPNetException
-from Filepool.FPServerException import FPServerException
-from Filepool.FPClientException import FPClientException
-from Filepool.FPClip import FPClip
-from Filepool.FPTag import FPTag
-from Filepool.FPFileOutputStream import FPFileOutputStream
-from Filepool.FPRetention import FPRetention
+try:
+    from sys import argv
+    progname, clipid, outfilename = argv[:3]
+except IndexError:
+    pass
+
+
+
 
 try:
 
-  ip = raw_input( "Pool address: " )
-
+  """                 /*Stores your application's name and version for registration on Centera
+               This call should be made one time, before the FPPoolOpen() call,
+               for each application that interfaces with centera
+               *
+               Applications can also be registered via the environment variables 
+               FP_OPTION_APP_NAME and FP_OPTION_APP_VER The values set through API
+               will override what is set through environment variable.
+  """
+  
+  sys.path.append("/home/legrec/legacyrecorder-python-api/caspython/src/build/lib.linux-x86_64-2.6")
+  from Filepool.FPLibrary import FPLibrary
+  from Filepool.FPPool import FPPool
+  from Filepool.FPException import FPException
+  from Filepool.FPNetException import FPNetException
+  from Filepool.FPServerException import FPServerException
+  from Filepool.FPClientException import FPClientException
+  from Filepool.FPClip import FPClip
+  from Filepool.FPTag import FPTag
+  from Filepool.FPFileOutputStream import FPFileOutputStream
+  from Filepool.FPRetention import FPRetention
+  
+  
+  ip = "192.168.26.7" #raw_input( "Pool address: " )
+  clipid = "5GVU8O939OERGe1VV510G5SKVSIG418DHD4R2C05CENHRDNFDKNAG"
   pool = FPPool( ip )
-
   pool.setGlobalOption( FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
     100 * 1024 )
-
   pool.getPoolInfo()
-
+  # the application will be attached to the clip id
   pool.registerApplication( "python wrapper read example", "1.0" )
 
   clip = FPClip( pool )
+  # clipid = raw_input( "Clip id: " )
+  clip.open( clipid, FPLibrary.FP_OPEN_ASTREE)
+  
+  for a in "name retention.period numfiles".split():
+      clip.getDescriptionAttribute(a)
 
-  clipid = raw_input( "Clip id: " )
-
-  clip.open( clipid, FPLibrary.FP_OPEN_ASTREE )
 
   top = clip.getTopTag()
+  print("tag: %r" % top)
 
-  blob_tag = FPTag( clip.fetchNext() )
+  for i in range(clip.getNumBlobs() + 1):
+    blob_id = clip.fetchNext()
+    if not blob_id:
+      break
 
-  filename = raw_input( "Filename: " )
-  
-  file = FPFileOutputStream( filename )
+    blob_tag = FPTag(blob_id) 
+    if blob_tag.getBlobSize() < 1:
+      blob_tag.close()
+      continue
 
-  blob_tag.blobRead( file.stream, 0 )
+    print("tag: %r" % blob_tag)
 
-  file.close()
-  blob_tag.close()
+    file = FPFileOutputStream( outfilename + ".%s" % i)
+    print("reading file from centera...")
+    blob_tag.blobRead( file.stream, 0 )
+    print("ok")
+
+    file.close()
+    blob_tag.close()
+
   clip.close()
   pool.close()
 
