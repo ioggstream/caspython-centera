@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -33,7 +33,7 @@
 #   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 from nose.tools import *
 from nose import *
@@ -61,32 +61,39 @@ from setup import TestCentera
 class TestCenteraRead(TestCentera):
     # TestCentera opens and closes the pool
 
-    #@SkipTest
     def test_description(self):
+        expected_attributes = ['refid',
+                               'name',
+                               'modification.date',
+                               'totalsize',
+                               'clusterid',
+                               'modification.profile',
+                               'creation.date',
+                               'retention.period',
+                               'numfiles',
+                               'prev.clip',
+                               'creation.poolid',
+                               'modification.poolid',
+                               'numtags',
+                               'creation.profile',
+                               'type',
+                               'sdk.version',
+                               'clip.naming.scheme']
+
+        clip = FPClip(self.pool)
+        clip.open(clipid, FPLibrary.FP_OPEN_ASTREE)
         try:
-            clip = FPClip(self.pool)
-            clip.open(clipid, FPLibrary.FP_OPEN_ASTREE)
-            numattributes = clip.getNumDescriptionAttributes()
-            assert numattributes, "Missing Descrtiption attributes"
-
-            print("getting #attributes: %s ->" % numattributes)
-            for i in range(numattributes):
-                ret = clip.getDescriptionAttributeIndex(i)
-                print("getting index: %s -> %s" % (i, ret))
-
-        except Exception, e:
-            print e
+            attributes = clip.getNumDescriptionAttributes()
+            assert all(x in attributes for x in expected_attributes)
         finally:
             print("closing clip")
             clip.close()
 
     def test_files(self):
-    #    outfilename = "test_files"
+        #    outfilename = "test_files"
         try:
             clip = FPClip(self.pool)
             clip.open(clipid, FPLibrary.FP_OPEN_ASTREE)
-            numattributes = clip.getNumDescriptionAttributes()
-            assert numattributes, "Missing Descrtiption attributes"
 
             numfiles = clip.getNumBlobs()
             assert numfiles, "Missing blobs"

@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 # Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -33,7 +33,7 @@
 #   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 from __future__ import print_function
 
 from Filepool.FPLibrary import FPLibrary
@@ -41,17 +41,22 @@ from Filepool.FPRetention import FPRetention
 
 from setup import TestCentera
 
+import locale
+
 
 class TestClusterInfo(TestCentera):
+
     def test_clusterinfo(self):
         print("Cluster ID", self.pool.clusterid)
         print("Cluster Name", self.pool.clusterName)
         print("self.pool Info Version", str(self.pool.infoVersion))
         print("CentraStar Version", self.pool.version)
         print("Cluster Capacity in GB", str(self.pool.capacity >> 30))
-        print("Cluster Free Spacein GB", str(self.pool.freeSpace >> 30))
+        print("Cluster Free Space in GB", str(self.pool.freeSpace >> 30))
+        print("Cluster Free Space in bytes ", self.pool.freeSpace)
         print("Cluster Replica Address", self.pool.replicaAddress)
-        print("Native SDK Library Version", self.pool.getComponentVersion(FPLibrary.FP_VERSION_FPLIBRARY_DLL))
+        print("Native SDK Library Version",
+              self.pool.getComponentVersion(FPLibrary.FP_VERSION_FPLIBRARY_DLL))
         print("Cluster Time", self.pool.getClusterTime())
 
     def harn_getcapability_parameter(self, capability, parameter):
@@ -77,7 +82,7 @@ class TestClusterInfo(TestCentera):
                          ('exist', 'existence checking'),
                          ('monitor', 'monitor'),
                          ('clipenumeration', 'query')
-        ]:
+                         ]:
             allowed = self.harn_getcapability_parameter(c, "allowed")
             print(("\t{label:10}: {allowed}".format(
                 label=label, allowed=allowed)))
@@ -100,16 +105,20 @@ class TestClusterInfo(TestCentera):
 
     def test_capabilities_other(self):
         for capability, parameter, label in [
-            (FPLibrary.FP_BLOBNAMING, FPLibrary.FP_SUPPORTED_SCHEMES, "Default Blob Naming Scheme"),
-            (FPLibrary.FP_DELETIONLOGGING, FPLibrary.FP_SUPPORTED, "Deletion logging enabled,"),
-            (FPLibrary.FP_COMPLIANCE, FPLibrary.FP_EVENT_BASED_RETENTION, "Event Based Retention Supported,"),
-            (FPLibrary.FP_COMPLIANCE, FPLibrary.FP_RETENTION_HOLD, "Retention Hold Supported,"),
-            (FPLibrary.FP_COMPLIANCE, FPLibrary.FP_RETENTION_MIN_MAX, "Min/Max Enabled,")
+            (FPLibrary.FP_BLOBNAMING, FPLibrary.FP_SUPPORTED_SCHEMES,
+             "Default Blob Naming Scheme"),
+            (FPLibrary.FP_DELETIONLOGGING,
+             FPLibrary.FP_SUPPORTED, "Deletion logging enabled,"),
+            (FPLibrary.FP_COMPLIANCE, FPLibrary.FP_EVENT_BASED_RETENTION,
+             "Event Based Retention Supported,"),
+            (FPLibrary.FP_COMPLIANCE, FPLibrary.FP_RETENTION_HOLD,
+             "Retention Hold Supported,"),
+            (FPLibrary.FP_COMPLIANCE,
+             FPLibrary.FP_RETENTION_MIN_MAX, "Min/Max Enabled,")
         ]:
             print("{label:30} {value}".format(label=label,
-                                           value=self.pool.getCapability(capability, parameter))
-            )
-
+                                              value=self.pool.getCapability(capability, parameter))
+                  )
 
     def test_retention_classes(self):
         #
@@ -117,7 +126,8 @@ class TestClusterInfo(TestCentera):
         #
         self.pool.openRetentionClassContext()
         r = self.pool.getNumRetentionClass()
-        print("There are {r}  retention classes defined on the cluster".format(r=r))
+        print(
+            "There are {r}  retention classes defined on the cluster".format(r=r))
         if r < 1:
             return
 
@@ -176,7 +186,8 @@ class TestClusterInfo(TestCentera):
             for a in action:
                 for m in mode:
                     option = 'FP_OPTION_MULTICLUSTER_%s_%s' % (a, m)
-                    value = self.pool.getGlobalOption(getattr(FPLibrary, option))
+                    value = self.pool.getGlobalOption(
+                        getattr(FPLibrary, option))
                     print("{action:9} {mode:.15} strategy:\t{strategy}".format(
                         action=a,
                         mode='cluster' if m == 'CLUSTERS' else 'failover',
