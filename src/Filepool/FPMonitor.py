@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,80 +26,72 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPMonitor(FPLibrary):
 
-  handle		= 0L
-  address		= ''
-  event			= 0
+    handle = 0L
+    address = ''
+    event = 0
 
+    def __init__(self, address):
 
-  def __init__( self, address ):
+        self.address = address
 
-    self.address = address
+    def open(self):
 
+        self.handle = FPNative.monitor_open(self.address)
+        self.check_error()
 
-  def open( self ):
+    def close(self):
 
-    self.handle = FPNative.monitor_open( self.address )
-    self.check_error()
-    
+        FPNative.monitor_close(self.handle)
+        self.check_error()
 
-  def close( self ):
+    def getAllStatistics(self):
 
-    FPNative.monitor_close( self.handle )
-    self.check_error()
+        data = FPNative.monitor_get_all_statistics(self.handle)
+        self.check_error()
 
+        return data
 
-  def getAllStatistics( self ):
+    def getAllStatisticsStream(self, stream):
 
-    data = FPNative.monitor_get_all_statistics( self.handle )        
-    self.check_error()
+        FPNative.monitor_get_all_statistics_stream(self.handle, stream)
+        self.check_error()
 
-    return data
+    def getDiscovery(self):
 
+        data = FPNative.monitor_get_discovery(self.handle)
+        self.check_error()
 
-  def getAllStatisticsStream( self, stream ):
+        return data
 
-    FPNative.monitor_get_all_statistics_stream( self.handle, stream )
-    self.check_error()
+    def getDiscoveryStream(self, stream):
 
+        FPNative.monitor_get_discovery_stream(self.handle, stream)
+        self.check_error()
 
-  def getDiscovery( self ):
+    def eventCallbackClose(self):
 
-    data = FPNative.monitor_get_discovery( self.handle )
-    self.check_error()
+        FPNative.event_callback_close(self.event)
+        self.check_error()
 
-    return data
+    def eventCallbackRegisterForAllEvents(self):
 
+        self.event = FPNative.event_callback_close(self.handle)
+        self.check_error()
 
-  def getDiscoveryStream( self, stream ):
-
-    FPNative.monitor_get_discovery_stream( self.handle, stream )
-    self.check_error()
-
-
-  def eventCallbackClose( self ):
-
-    FPNative.event_callback_close( self.event )
-    self.check_error()
-
-
-  def eventCallbackRegisterForAllEvents( self ):
-
-    self.event = FPNative.event_callback_close( self.handle )
-    self.check_error()
-
-    return self.event
+        return self.event

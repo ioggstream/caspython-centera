@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,201 +26,179 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPPool(FPLibrary):
 
-  handle 		= ''
-  infoVersion		= ''
-  capacity		= 0
-  freeSpace		= 0
-  clusterid		= ''
-  clusterName		= ''
-  version		= ''
-  replicaAddress	= ''
+    handle = ''
+    infoVersion = ''
+    capacity = 0
+    freeSpace = 0
+    clusterid = ''
+    clusterName = ''
+    version = ''
+    replicaAddress = ''
 
-  context               = 0
+    context = 0
 
+    def __init__(self, address):
 
-  def __init__( self, address ):
+        self.open(address)
 
-    self.open( address )
+    def open(self, address):
 
+        self.handle = FPNative.pool_open(address)
+        self.check_error()
 
-  def open( self, address ):
+    def close(self):
 
-    self.handle = FPNative.pool_open( address )
-    self.check_error()
+        FPNative.pool_close(self.handle)
+        self.check_error()
 
+    def setGlobalOption(self, name, value):
 
-  def close( self ):
+        FPNative.set_global_option(name, value)
+        self.check_error()
 
-    FPNative.pool_close( self.handle )
-    self.check_error()
+    def setIntOption(self, name, value):
 
+        FPNative.set_int_option(self.handle, name, value)
+        self.check_error()
 
-  def setGlobalOption( self, name, value ):
+    def getComponentVersion(self, component):
 
-    FPNative.set_global_option( name, value )
-    self.check_error()
+        version = FPNative.get_component_version(component)
+        self.check_error()
 
+        return version
 
-  def setIntOption( self, name, value ):
+    def getClusterTime(self):
 
-    FPNative.set_int_option( self.handle, name, value )
-    self.check_error()
+        time = FPNative.get_cluster_time(self.handle)
+        self.check_error()
 
+        return time
 
-  def getComponentVersion( self, component ):
+    def getCapability(self, name, attr_name):
 
-    version = FPNative.get_component_version( component )
-    self.check_error()
+        capability = FPNative.get_capability(self.handle, name, attr_name)
+        self.check_error()
 
-    return version
+        return capability
 
+    def getClipID(self):
 
-  def getClusterTime( self ):
+        clipid = FPNative.get_clip_id(self.handle)
+        self.check_error()
 
-    time = FPNative.get_cluster_time( self.handle )
-    self.check_error()
+        return clipid
 
-    return time
+    def getGlobalOption(self, name):
 
+        value = FPNative.get_global_option(name)
+        self.check_error()
 
-  def getCapability( self, name, attr_name ):
+        return value
 
-    capability = FPNative.get_capability( self.handle, name, attr_name )
-    self.check_error()
+    def getIntOption(self, name):
 
-    return capability
+        value = FPNative.get_int_option(self.handle, name)
+        self.check_error()
 
+        return value
 
-  def getClipID( self ):
+    def getPoolInfo(self):
 
-    clipid = FPNative.get_clip_id( self.handle )
-    self.check_error()
+        poolInfo = FPNative.get_pool_info(self.handle)
+        self.check_error()
 
-    return clipid
+        self.infoVersion = poolInfo[0]
+        self.capacity = poolInfo[1]
+        self.freeSpace = poolInfo[2]
+        self.clusterid = poolInfo[3]
+        self.clusterName = poolInfo[4]
+        self.version = poolInfo[5]
+        self.replicaAddress = poolInfo[6]
 
+    def openRetentionClassContext(self):
 
-  def getGlobalOption( self, name ):
+        value = FPNative.get_retention_class_context(self.handle)
+        self.check_error()
 
-    value = FPNative.get_global_option( name )
-    self.check_error()
+        self.context = value
 
-    return value
+        return value
 
+    def closeRetentionClassContext(self):
 
-  def getIntOption( self, name ):
+        value = FPNative.retention_class_context_close(self.context)
+        self.check_error()
 
-    value = FPNative.get_int_option( self.handle, name )
-    self.check_error()
+    def getFirstRetentionClass(self):
 
-    return value
+        retention_class = FPNative.retention_class_context_get_first_class(
+            self.context)
+        self.check_error()
 
+        return retention_class
 
-  def getPoolInfo( self ):
+    def getLastRetentionClass(self):
 
-    poolInfo = FPNative.get_pool_info( self.handle )
-    self.check_error()
+        retention_class = FPNative.retention_class_context_get_last_class(
+            self.context)
+        self.check_error()
 
-    self.infoVersion		= poolInfo[0]
-    self.capacity		= poolInfo[1]
-    self.freeSpace		= poolInfo[2]
-    self.clusterid		= poolInfo[3]
-    self.clusterName		= poolInfo[4]
-    self.version		= poolInfo[5]
-    self.replicaAddress	        = poolInfo[6]
+        return retention_class
 
+    def getNamedRetentionClass(self, name):
 
-  def openRetentionClassContext( self ):
+        retention_class = FPNative.retention_class_context_get_named_class(
+            self.context, name)
+        self.check_error()
 
-    value = FPNative.get_retention_class_context( self.handle )
-    self.check_error()
+        return retention_class
 
-    self.context = value
+    def getNextRetentionClass(self):
 
-    return value
+        retention_class = FPNative.retention_class_context_get_next_class(
+            self.context)
+        self.check_error()
 
+        return retention_class
 
-  def closeRetentionClassContext( self ):
+    def getNumRetentionClass(self):
 
-    value = FPNative.retention_class_context_close( self.context )
-    self.check_error()
+        total = FPNative.retention_class_context_get_num_classes(self.context)
+        self.check_error()
 
+        return total
 
+    def getPreviousRetentionClass(self):
 
-  def getFirstRetentionClass( self ):
+        retention_class = FPNative.retention_class_context_get_previous_class(
+            self.context)
+        self.check_error()
 
-    retention_class = FPNative.retention_class_context_get_first_class( \
-    self.context )
-    self.check_error()
+        return retention_class
 
-    return retention_class
+    def registerApplication(self, name, version):
 
+        FPNative.register_application(name, version)
+        self.check_error()
 
-  def getLastRetentionClass( self ):
+    def setClipID(self, id):
 
-    retention_class = FPNative.retention_class_context_get_last_class( \
-    self.context )
-    self.check_error()
-
-    return retention_class
-
-
-  def getNamedRetentionClass( self, name ):
-
-    retention_class = FPNative.retention_class_context_get_named_class( \
-    self.context, name )
-    self.check_error()
-
-    return retention_class
-
-
-  def getNextRetentionClass( self ):
-
-    retention_class = FPNative.retention_class_context_get_next_class( \
-    self.context )
-    self.check_error()
-
-    return retention_class
-
-
-  def getNumRetentionClass( self ):
-
-    total = FPNative.retention_class_context_get_num_classes( self.context )
-    self.check_error()
-
-    return total
-
-
-  def getPreviousRetentionClass( self ):
-
-    retention_class = FPNative.retention_class_context_get_previous_class( \
-    self.context )
-    self.check_error()
-
-    return retention_class
-
-
-  def registerApplication( self, name, version ):
-
-    FPNative.register_application( name, version )
-    self.check_error()
-
-
-  def setClipID( self, id ):
-
-    FPNative.set_clip_id( self.handle, id )
-    self.check_error()
+        FPNative.set_clip_id(self.handle, id)
+        self.check_error()

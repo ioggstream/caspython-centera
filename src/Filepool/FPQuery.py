@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,55 +26,51 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPQuery(FPLibrary):
 
-  pool_handle		= 0L
-  query			= 0
-  expression		= 0
+    pool_handle = 0L
+    query = 0
+    expression = 0
 
+    def __init__(self, pool):
 
-  def __init__( self, pool ):
+        self.pool_handle = pool.handle
 
-    self.pool_handle = pool.handle
+    def open(self, expression):
 
+        self.query = FPNative.pool_query_open(
+            self.pool_handle, expression.handle)
+        self.check_error()
 
-  def open( self, expression ):
+    def close(self):
 
-    self.query = FPNative.pool_query_open( self.pool_handle, expression.handle )
-    self.check_error()
+        FPNative.pool_query_close(self.query)
+        self.check_error()
 
+    def fetchResult(self, timeout):
 
-  def close( self ):
+        result = FPNative.pool_query_fetch_result(self.query, timeout)
+        self.check_error()
 
-    FPNative.pool_query_close( self.query )
-    self.check_error()
-    
+        return result
 
-  def fetchResult( self, timeout ):
+    def getPoolRef(self):
 
-    result = FPNative.pool_query_fetch_result( self.query, timeout )
-    self.check_error()
+        pool = FPNative.pool_query_get_pool_ref(self.query)
+        self.check_error()
 
-    return result
-
-
-  def getPoolRef( self ):
-
-    pool = FPNative.pool_query_get_pool_ref( self.query )
-    self.check_error()
-
-    return pool
-
+        return pool

@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,64 +26,57 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPQueryResult(FPLibrary):
 
-  handle		= 0L
+    handle = 0L
 
+    def __init__(self, handle):
 
-  def __init__( self, handle ):
+        self.handle = handle
 
-    self.handle = handle
+    def close(self):
 
+        FPNative.query_result_close(self.handle)
+        self.check_error()
 
-  def close( self ):
+    def getClipId(self):
 
-    FPNative.query_result_close( self.handle )
-    self.check_error()
-    
+        clip = FPNative.query_result_get_clip_id(self.handle)
+        self.check_error()
 
-  def getClipId( self ):
+        return clip
 
-    clip = FPNative.query_result_get_clip_id( self.handle )
-    self.check_error()
+    def getField(self, name):
 
-    return clip
+        field = FPNative.query_result_get_field(self.handle, name)
+        self.check_error()
 
+        return field
 
-  def getField( self, name ):
+    def getResultCode(self):
 
-    field = FPNative.query_result_get_field( self.handle, name )
-    self.check_error()
+        code = FPNative.query_result_get_result_code(self.handle)
+        self.check_error()
 
-    return field
+        return code
 
+    def getTimestamp(self):
 
-  def getResultCode( self ):
+        timestamp = FPNative.query_result_get_timestamp(self.handle)
+        self.check_error()
 
-    code = FPNative.query_result_get_result_code( self.handle )
-    self.check_error()
-
-    return code
-
-
-  def getTimestamp( self ):
-
-    timestamp = FPNative.query_result_get_timestamp( self.handle )
-    self.check_error()
-
-    return timestamp
-
-
+        return timestamp

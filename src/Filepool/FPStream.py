@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,24 +26,25 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPStream(FPLibrary):
 
-  stream      = 0
+    stream = 0
 
-  def close( self ):
+    def close(self):
 
-    FPNative.close_stream( self.stream )
-    self.check_error()
+        FPNative.close_stream(self.stream)
+        self.check_error()

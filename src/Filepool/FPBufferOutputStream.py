@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,24 +26,23 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
-from FPStream 	import FPStream
+from FPStream import FPStream
+
 
 class FPBufferOutputStream(FPStream):
 
-  def __init__( self, buffer, buffersize ):
+    def __init__(self, buffer, buffersize):
 
-    self.stream = FPNative.create_buffer_ostream( buffer, buffersize )
-    self.check_error()
-
-
+        self.stream = FPNative.create_buffer_ostream(buffer, buffersize)
+        self.check_error()

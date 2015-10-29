@@ -159,19 +159,17 @@ class TestClusterInfo(TestCentera):
                  "Embedded blob threshold (bytes)"),
                 ('openstrategy', "self.pool open strategy")
         ):
-            optno = getattr(FPLibrary, 'FP_OPTION_{}'.format(option.upper()))
+            optno = getattr(FPLibrary, 'FP_OPTION_{name}'.format(name=option.upper()))
             print(("{label}: {value}".format(
                 label=label, value=self.pool.getGlobalOption(optno))))
 
     def test_pool_options(self):
-        print("self.pool options:")
+        print("self.pool options:" "\n"
+              "Buffersize",
+              self.pool.getIntOption(FPLibrary.FP_OPTION_BUFFERSIZE)
+        )
 
-        print("\n")
-
-        print("Buffersize+" + str(self.pool.getIntOption(
-            FPLibrary.FP_OPTION_BUFFERSIZE)))
-
-        print("self.pool connection timeout:+" + str(self.pool.getIntOption(
+        print("self.pool connection timeout:", str(self.pool.getIntOption(
             FPLibrary.FP_OPTION_TIMEOUT)))
 
         cluster_failover = self.pool.getIntOption(
@@ -193,12 +191,11 @@ class TestClusterInfo(TestCentera):
                         mode='cluster' if m == 'CLUSTERS' else 'failover',
                         strategy=value)
                     )
-
         else:
             print("False")
 
-        print("Collision avoidance enabled+" + str(self.pool.getIntOption(
+        print("Collision avoidance enabled:",  str(self.pool.getIntOption(
             FPLibrary.FP_OPTION_DEFAULT_COLLISION_AVOIDANCE)))
 
-        print("Prefetch buffer size+" + str(
+        print("Prefetch buffer size:", str(
             self.pool.getIntOption(FPLibrary.FP_OPTION_PREFETCH_SIZE)))

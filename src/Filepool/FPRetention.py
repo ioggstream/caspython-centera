@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,48 +26,45 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPRetention(FPLibrary):
 
-  handle		= 0L
-  name			= ''
-  period		= 0
+    handle = 0L
+    name = ''
+    period = 0
 
+    def __init__(self, handle):
 
-  def __init__( self, handle ):
+        self.handle = handle
 
-    self.handle = handle
+    def close(self):
 
+        FPNative.retention_class_close(self.handle)
+        self.check_error()
 
-  def close( self ):
+    def getName(self):
 
-    FPNative.retention_class_close( self.handle )
-    self.check_error()
+        self.name = FPNative.retention_class_get_name(self.handle)
+        self.check_error()
 
+        return self.name
 
-  def getName( self ):
+    def getPeriod(self):
 
-    self.name = FPNative.retention_class_get_name( self.handle )        
-    self.check_error()
+        self.period = FPNative.retention_class_get_period(self.handle)
+        self.check_error()
 
-    return self.name
-
-
-  def getPeriod( self ):
-
-    self.period = FPNative.retention_class_get_period( self.handle )
-    self.check_error()
-
-    return self.period
+        return self.period

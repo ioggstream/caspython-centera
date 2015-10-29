@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,50 +26,46 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPTime(FPLibrary):
 
+    def timeMillisecondsToString(self, mseconds, options):
 
-  def timeMillisecondsToString( self, mseconds, options ):
+        value = FPNative.time_milliseconds_to_string(mseconds, options)
+        self.check_error()
 
-    value = FPNative.time_milliseconds_to_string( mseconds, options )
-    self.check_error()
+        return value
 
-    return value
+    def timeSecondsToString(self, seconds, options):
 
+        value = FPNative.time_seconds_to_string(seconds, options)
+        self.check_error()
 
-  def timeSecondsToString( self, seconds, options ):
+        return value
 
-    value = FPNative.time_seconds_to_string( seconds, options )        
-    self.check_error()
+    def timeStringToMilliseconds(self, time_str):
 
-    return value
+        mseconds = FPNative.time_string_to_milliseconds(time_str)
+        self.check_error()
 
+        return mseconds
 
-  def timeStringToMilliseconds( self, time_str ):
+    def timeStringToSeconds(self, time_str):
 
-    mseconds = FPNative.time_string_to_milliseconds( time_str )
-    self.check_error()
+        seconds = FPNative.time_string_to_seconds(time_str)
+        self.check_error()
 
-    return mseconds
-
-
-  def timeStringToSeconds( self, time_str ):
-
-    seconds = FPNative.time_string_to_seconds( time_str )
-    self.check_error()
-
-    return seconds
-
+        return seconds

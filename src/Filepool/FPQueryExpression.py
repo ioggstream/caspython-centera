@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,94 +26,83 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 
+
 class FPQueryExpression(FPLibrary):
 
-  handle		= 0
+    handle = 0
 
+    def __init__(self):
 
-  def __init__( self ):
+        self.handle = FPNative.query_expression_create()
+        self.check_error()
 
-    self.handle = FPNative.query_expression_create()
-    self.check_error()
+    def close(self):
 
+        FPNative.query_expression_close(self.handle)
+        self.check_error()
 
-  def close( self ):
+    def deselectField(self, name):
 
-    FPNative.query_expression_close(self.handle)
-    self.check_error()
+        FPNative.query_expression_deselect_field(self.handle, name)
+        self.check_error()
 
+    def getEndTime(self):
 
-  def deselectField( self, name ):
+        time = FPNative.query_expression_get_end_time(self.handle)
+        self.check_error()
 
-    FPNative.query_expression_deselect_field( self.handle, name )
-    self.check_error()
+        return time
 
+    def getStartTime(self):
 
-  def getEndTime( self ):
+        time = FPNative.query_expression_get_end_time(self.handle)
+        self.check_error()
 
-    time = FPNative.query_expression_get_end_time( self.handle )
-    self.check_error()
+        return time
 
-    return time
+    def getType(self):
 
+        type = FPNative.query_expression_get_end_time(self.handle)
+        self.check_error()
 
-  def getStartTime( self ):
+        return type
 
-    time = FPNative.query_expression_get_end_time( self.handle )
-    self.check_error()
+    def isFieldSelected(self):
 
-    return time
+        value = FPNative.query_expression_get_end_time(self.handle)
+        self.check_error()
 
+        return value
 
-  def getType( self ):
+    def selectField(self, name):
 
-    type = FPNative.query_expression_get_end_time( self.handle )
-    self.check_error()
+        FPNative.query_expression_select_field(self.handle, name)
+        self.check_error()
 
-    return type
+    def setEndTime(self, time):
 
+        FPNative.query_expression_set_end_time(self.handle, time)
+        self.check_error()
 
-  def isFieldSelected( self ):
+    def setStartTime(self, time):
 
-    value = FPNative.query_expression_get_end_time( self.handle )
-    self.check_error()
+        FPNative.query_expression_set_start_time(self.handle, time)
+        self.check_error()
 
-    return value
+    def setType(self, type):
 
-
-  def selectField( self, name ):
-
-    FPNative.query_expression_select_field( self.handle, name )
-    self.check_error()
-
-
-  def setEndTime( self, time ):
-
-    FPNative.query_expression_set_end_time( self.handle, time )
-    self.check_error()
-
-
-  def setStartTime( self, time ):
-
-    FPNative.query_expression_set_start_time( self.handle, time )
-    self.check_error()
-
-
-  def setType( self, type ):
-
-    FPNative.query_expression_set_type( self.handle, type )
-    self.check_error()
-
+        FPNative.query_expression_set_type(self.handle, type)
+        self.check_error()

@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,17 +26,17 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
-__all__ = [ "FPPool", 
-"FPClip", "FPTag", "FPQuery", "FPMonitor", "FPLibrary", \
-  "FPException", "FPNetException", "FPServerException", "FPClientException", \
-  "FPStream", "FPFileInputStream", "FPFileOutputStream", "FPBufferInputStream", \
-  "FPBufferOutputStream", "FPRetention", "FPQueryResult" ]
+__all__ = ["FPPool",
+           "FPClip", "FPTag", "FPQuery", "FPMonitor", "FPLibrary",
+           "FPException", "FPNetException", "FPServerException", "FPClientException",
+           "FPStream", "FPFileInputStream", "FPFileOutputStream", "FPBufferInputStream",
+           "FPBufferOutputStream", "FPRetention", "FPQueryResult"]

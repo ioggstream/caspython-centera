@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,23 +26,23 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPException import FPException
 
+
 class FPNetException(FPException):
 
- def __str__( self ):
-    value = "FPNetException: [" + str(self.error) + "] : " + self.errorString + \
-      " : " + self.message
-    return value
-
+    def __str__(self):
+        value = "FPNetException: [" + str(self.error) + "] : " + self.errorString + \
+            " : " + self.message
+        return value

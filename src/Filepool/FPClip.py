@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -33,14 +33,26 @@
 #   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import FPNative
 
 from FPLibrary import FPLibrary
 from FPException import FPException
+import time
+from Filepool.FPTag import FPTag
+
+
+def loggable(f):
+    def tmp(*args, **kwds):
+        print(f.__name__)
+        ret = f(*args, **kwds)
+        return ret
+    return tmp
+
 
 class FPClip(FPLibrary):
+
     """
     Class take references of:
     - pool_handle
@@ -55,7 +67,8 @@ class FPClip(FPLibrary):
     # TODO split method by implicit parameters:
     #  - self.handle
     #  - class attributes should be moved under init
-    _proxied_methods = [m.replace("clip_", "", 1) for m in dir(FPNative) if m.startswith("clip_")]
+    _proxied_methods = [m.replace("clip_", "", 1)
+                        for m in dir(FPNative) if m.startswith("clip_")]
 
     def __init__(self, pool, name=None, close_retries=0):
         # Validate inserted data.
@@ -70,7 +83,6 @@ class FPClip(FPLibrary):
         self.pool_handle = pool.handle
         self.close_retries = close_retries
 
-
         def __getattr__(self, item):
             # Fallback on proxied methods.
             if item in _proxied_methods:
@@ -84,8 +96,13 @@ class FPClip(FPLibrary):
 
                 return f
 
-    def open(self, clipid, mode):
+    def open(self, clipid, mode=FPLibrary.FP_OPEN_ASTREE):
+        """
 
+        :param clipid:
+        :param mode: FPLibrary.FP_OPEN_ASTREE (default) or FPLibrary.FP_OPEN_FLAT
+        :return:
+        """
         self.clipid = clipid
         self.handle = FPNative.clip_open(self.pool_handle, clipid, mode)
         self.check_error()
@@ -98,18 +115,20 @@ class FPClip(FPLibrary):
         return self.clipid
 
     def _close(self):
-        """Close a clip.
+        """Close a clip. If it's not open, just don't check for errors.
         """
         if self.top_handle != 0:
             print("Closing top_tag handle.")
             FPNative.tag_close(self.top_handle)
             self.check_error()
+            self.top_handle = 0
 
         if self.handle != 0:
             print("Closing handle.")
             FPNative.clip_close(self.handle)
+            self.check_error()
+            self.handle = 0
 
-        self.check_error()
 
     def close(self, retries=None, retry_interval=1):
         """
@@ -118,17 +137,16 @@ class FPClip(FPLibrary):
         :param retry_interval:
         :return:
         """
-        if retries is None:
-            return self._close()
-
         for i in range(retries or self.close_retries):
             try:
                 self._close()
                 return
             except FPException as e:
-                print("Waiting.")
-                time.sleep(retry_interval)
-
+                if e.errorString == "FP_OBJECTINUSE_ERR":
+                    print("Object in use: waiting.")
+                    time.sleep(retry_interval)
+        # Should close at least one time.
+        self._close()
 
     def getTopTag(self):
 
@@ -140,7 +158,7 @@ class FPClip(FPLibrary):
 
     def auditedDelete(self, clipid, reason, options):
 
-        FPNative.clip_audited_delete(self.pool_handle, clipid, \
+        FPNative.clip_audited_delete(self.pool_handle, clipid,
                                      reason, options)
         self.check_error()
 
@@ -161,7 +179,7 @@ class FPClip(FPLibrary):
 
     def rawOpen(self, clipid, stream, options):
 
-        self.clip = FPNative.clip_raw_open(self.pool_handle, clipid, \
+        self.clip = FPNative.clip_raw_open(self.pool_handle, clipid,
                                            stream, options)
         self.check_error()
 
@@ -202,13 +220,13 @@ class FPClip(FPLibrary):
 
     def triggerEbrEventWithClass(self, retention_class):
 
-        FPNative.clip_trigger_ebr_event_with_class(self.handle, \
+        FPNative.clip_trigger_ebr_event_with_class(self.handle,
                                                    retention_class)
         self.check_error()
 
     def triggerEbrEventWithPeriod(self, seconds):
 
-        FPNative.clip_trigger_ebr_event_with_period(self.handle, \
+        FPNative.clip_trigger_ebr_event_with_period(self.handle,
                                                     seconds)
         self.check_error()
 
@@ -340,7 +358,7 @@ class FPClip(FPLibrary):
 
     def isRetentionClassValid(self, retention_class):
 
-        value = FPNative.clip_validate_retention_class(self.handle, \
+        value = FPNative.clip_validate_retention_class(self.handle,
                                                        retention_class)
         self.check_error()
 
@@ -348,7 +366,7 @@ class FPClip(FPLibrary):
 
     def getDescriptionAttribute(self, attribute):
 
-        value = FPNative.clip_get_description_attribute(self.handle, \
+        value = FPNative.clip_get_description_attribute(self.handle,
                                                         attribute)
         self.check_error()
 
@@ -356,7 +374,7 @@ class FPClip(FPLibrary):
 
     def getDescriptionAttributeIndex(self, index):
 
-        value = FPNative.clip_get_description_attribute_index(self.handle, \
+        value = FPNative.clip_get_description_attribute_index(self.handle,
                                                               index)
         self.check_error()
 
@@ -383,7 +401,6 @@ class FPClip(FPLibrary):
 
         tag = FPNative.clip_fetch_next(self.handle)
         self.check_error()
-
         return tag
 
     def getDescriptionAttributes(self):
@@ -397,20 +414,24 @@ class FPClip(FPLibrary):
             for i in a_len
         )
 
-    def getFiles(self):
+    def getTags(self):
+        """
+
+        :return: an iterable of (tag_name, tag_size)
+        """
         numfiles = self.getNumBlobs()
         if not numfiles:
             return
 
         for i in range(numfiles + 1):
-            blob_id = clip.fetchNext()
+            blob_id = self.fetchNext()
             if not blob_id:
                 break
-
             blob_tag = FPTag(blob_id)
-            ret = blob_tag.getTagName(), blob_tag.getBlobSize()
+            tag_name = blob_tag.getTagName()
+            blob_size = blob_tag.getBlobSize()
             blob_tag.close()
-            yield ret
+            yield tag_name, blob_size
 
     def readFiles(self, tag_name, out_file):
         numfiles = self.getNumBlobs()
@@ -429,4 +450,3 @@ class FPClip(FPLibrary):
 
             finally:
                 blob_tag.close()
-

@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,34 +26,35 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
+
 
 class FPException(Exception):
 
-  error			= 0
-  systemError		= 0
-  trace			= ''
-  message		= ''
-  errorString		= ''
-  errorClass		= 0
+    error = 0
+    systemError = 0
+    trace = ''
+    message = ''
+    errorString = ''
+    errorClass = 0
 
-  def __init__( self, error_list ):
+    def __init__(self, error_list):
 
-    self.error 		= error_list[0]
-    self.systemError	= error_list[1]
-    self.trace		= error_list[2]
-    self.message	= error_list[3]
-    self.errorString	= error_list[4]
-    self.errorClass	= error_list[5]
+        self.error = error_list[0]
+        self.systemError = error_list[1]
+        self.trace = error_list[2]
+        self.message = error_list[3]
+        self.errorString = error_list[4]
+        self.errorClass = error_list[5]
 
-  def __str__( self ):
-    value = "FPException: [" + str(self.error) + "] : " + self.errorString + \
-    " - " + self.message
-    return value
+    def __str__(self):
+        value = "FPException: [" + str(self.error) + "] : " + self.errorString + \
+            " - " + self.message
+        return value
