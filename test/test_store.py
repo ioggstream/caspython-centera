@@ -59,15 +59,6 @@ from contextlib import closing
 class TestCenteraRead(TestCentera):
     # TestCentera opens and closes the self.pool
 
-    def wait_close(self, clip):
-        for i in range(3):
-            try:
-                clip.close()
-                return
-            except FPException as e:
-                print("Waiting.")
-                time.sleep(1)
-        clip.close()
 
     def test_store_small(self):
         try:
@@ -77,16 +68,11 @@ class TestCenteraRead(TestCentera):
             top_tag = "file"
             clip_name = "myclip_" + filename
 
-            clip = FPClip(self.pool, clip_name)
-            clipid = self.write_clip(clip, filename, retention_sec, top_tag)
-            print clipid
+            with closing(FPClip(self.pool, clip_name, close_retries=3)) as clip:
+                clipid = self.write_clip(clip, filename, retention_sec, top_tag)
+                print clipid
 
-            with closing(FPClip(self.pool)) as ch:
-                ch.open(clipid, FPLibrary.FP_OPEN_ASTREE)
-                clip_attrs = ch.getDescriptionAttributes()
-                assert filename in clip_attrs[
-                    'name'], "Missing data in %r" % clip_attrs
-                print(clip_attrs)
+            self.assert_clip_name(clipid, filename)
         except FPClientException, c:
             print c
             traceback.print_exc(file=sys.stdout)
@@ -96,8 +82,14 @@ class TestCenteraRead(TestCentera):
             print n
         except FPException, e:
             print e
-        finally:
-            self.wait_close(clip)
+
+    def assert_clip_name(self, clipid, filename):
+        with closing(FPClip(self.pool, close_retries=3)) as ch:
+            ch.open(clipid, FPLibrary.FP_OPEN_ASTREE)
+            clip_attrs = ch.getDescriptionAttributes()
+            assert filename in clip_attrs[
+                'name'], "Missing data in %r" % clip_attrs
+            print(clip_attrs)
 
     def test_store_large(self):
         retention_sec = 100
@@ -105,21 +97,16 @@ class TestCenteraRead(TestCentera):
         top_tag = "file"
         clip_name = "myclip_" + filename
 
-        clip = FPClip(self.pool, clip_name)
-        try:
+        with closing(FPClip(self.pool, clip_name, close_retries=3)) as clip:
             clipid = self.write_clip(clip, filename, retention_sec, top_tag)
             print clipid
-
-        finally:
-            self.wait_close(clip)
 
     def test_store_many(self):
         retention_sec = 100
         files = "1.xml 2.xml 3.xml 4.xml".split()
         clip_name = "myclip_" + "manyfiles"
 
-        clip = FPClip(self.pool, clip_name)
-        try:
+        with closing(FPClip(self.pool, clip_name, close_retries=3)) as clip:
             clip.setRetentionPeriod(long(retention_sec))
             top_handle = clip.getTopTag()
             for filename in files:
@@ -127,8 +114,6 @@ class TestCenteraRead(TestCentera):
                     with closing(FPFileInputStream(filename, 16 * 1024)) as fh:
                         blob_tag.blobWrite(fh.stream, 0)
             clipid = clip.write()
-        finally:
-            self.wait_close(clip)
 
     def write_clip(self, clip, filename, retention_sec, top_tag):
         clip.setRetentionPeriod(long(retention_sec))

@@ -38,7 +38,7 @@
 import FPNative
 
 from FPLibrary import FPLibrary
-
+from FPException import FPException
 
 class FPClip(FPLibrary):
     """
@@ -57,16 +57,19 @@ class FPClip(FPLibrary):
     #  - class attributes should be moved under init
     _proxied_methods = [m.replace("clip_", "", 1) for m in dir(FPNative) if m.startswith("clip_")]
 
-    def __init__(self, pool, name=None):
+    def __init__(self, pool, name=None, close_retries=0):
+        # Validate inserted data.
 
         if pool is None:
             raise FPException("No Pool Reference")
 
-        self.pool_handle = pool.handle
-
         if name is not None:
             self.handle = FPNative.clip_create(pool.handle, name)
             self.check_error()
+
+        self.pool_handle = pool.handle
+        self.close_retries = close_retries
+
 
         def __getattr__(self, item):
             # Fallback on proxied methods.
@@ -94,7 +97,7 @@ class FPClip(FPLibrary):
 
         return self.clipid
 
-    def close(self):
+    def _close(self):
         """Close a clip.
         """
         if self.top_handle != 0:
@@ -107,6 +110,25 @@ class FPClip(FPLibrary):
             FPNative.clip_close(self.handle)
 
         self.check_error()
+
+    def close(self, retries=None, retry_interval=1):
+        """
+        Close a clip retrying after a while n case of FPException.
+        :param retries: by default does not retry.
+        :param retry_interval:
+        :return:
+        """
+        if retries is None:
+            return self._close()
+
+        for i in range(retries or self.close_retries):
+            try:
+                self._close()
+                return
+            except FPException as e:
+                print("Waiting.")
+                time.sleep(retry_interval)
+
 
     def getTopTag(self):
 
