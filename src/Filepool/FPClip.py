@@ -41,11 +41,14 @@ from FPLibrary import FPLibrary
 from FPException import FPException
 import time
 from Filepool.FPTag import FPTag
+import logging
+
+log = logging.getLogger()
 
 
 def loggable(f):
     def tmp(*args, **kwds):
-        print(f.__name__)
+        log.debug("Calling %r", f.__name__)
         ret = f(*args, **kwds)
         return ret
     return tmp
@@ -118,17 +121,16 @@ class FPClip(FPLibrary):
         """Close a clip. If it's not open, just don't check for errors.
         """
         if self.top_handle != 0:
-            print("Closing top_tag handle.")
+            log.debug("Closing top_tag handle.")
             FPNative.tag_close(self.top_handle)
             self.check_error()
             self.top_handle = 0
 
         if self.handle != 0:
-            print("Closing handle.")
+            log.debug("Closing handle.")
             FPNative.clip_close(self.handle)
             self.check_error()
             self.handle = 0
-
 
     def close(self, retries=None, retry_interval=1):
         """
@@ -143,14 +145,14 @@ class FPClip(FPLibrary):
                 return
             except FPException as e:
                 if e.errorString == "FP_OBJECTINUSE_ERR":
-                    print("Object in use: waiting.")
+                    log.debug("Object in use: waiting.")
                     time.sleep(retry_interval)
         # Should close at least one time.
         self._close()
 
     def getTopTag(self):
 
-        if (self.top_handle == 0):
+        if self.top_handle == 0:
             self.top_handle = FPNative.get_top_tag(self.handle)
             self.check_error()
 
@@ -423,30 +425,31 @@ class FPClip(FPLibrary):
         if not numfiles:
             return
 
-        for i in range(numfiles + 1):
-            blob_id = self.fetchNext()
-            if not blob_id:
-                break
+        for blob_id in self.getBlobs():
             blob_tag = FPTag(blob_id)
             tag_name = blob_tag.getTagName()
             blob_size = blob_tag.getBlobSize()
             blob_tag.close()
             yield tag_name, blob_size
 
-    def readFiles(self, tag_name, out_file):
-        numfiles = self.getNumBlobs()
+    def readFiles(self, tag_name=None, out_file=None):
+        for blob_id in self.getBlobs():
 
-        for i in range(numfiles + 1):
-            blob_id = clip.fetchNext()
-            if not blob_id:
-                break
-
-            blob_tag = FPTag(blob_id)
-            try:
+            with closing(FPTag(blob_id)) as blob_tag:
                 if not tag_name or blob_tag.getTagName() == tag_name:
                     fh = FPFileOutputStream(outfile + tag_name + ".%s" % i)
-                    print("reading file from centera...")
+                    log.debug("reading file from centera...")
                     blob_tag.blobRead(fh.stream, 0)
 
-            finally:
-                blob_tag.close()
+    def getBlobs(self):
+        """
+        Iterate in all blob_id.
+        :return:
+        """
+        n = self.getNumBlobs()
+        for i in range(n + 1):
+            ret = self.fetchNext()
+            if not ret:
+                log.debug("No more blobs.")
+                break
+            yield ret

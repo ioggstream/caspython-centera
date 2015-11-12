@@ -39,6 +39,7 @@ from FPException import FPException
 
 
 class FPClientException(FPException):
+
     def __str__(self):
         value = "FPClientException: [" + str(self.error) + "] : " + self.errorString + \
                 " : " + self.message

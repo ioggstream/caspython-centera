@@ -26,11 +26,11 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
 #########################################################################
@@ -52,11 +52,11 @@ try:
                This call should be made one time, before the FPPoolOpen() call,
                for each application that interfaces with centera
                *
-               Applications can also be registered via the environment variables 
+               Applications can also be registered via the environment variables
                FP_OPTION_APP_NAME and FP_OPTION_APP_VER The values set through API
                will override what is set through environment variable.
   """
-  
+
   sys.path.append("/home/legrec/legacyrecorder-python-api/caspython/src/build/lib.linux-x86_64-2.6")
   from Filepool.FPLibrary import FPLibrary
   from Filepool.FPPool import FPPool
@@ -68,8 +68,8 @@ try:
   from Filepool.FPTag import FPTag
   from Filepool.FPFileOutputStream import FPFileOutputStream
   from Filepool.FPRetention import FPRetention
-  
-  
+
+
   ip = "192.168.26.7" #raw_input( "Pool address: " )
   clipid = "5GVU8O939OERGe1VV510G5SKVSIG418DHD4R2C05CENHRDNFDKNAG"
   pool = FPPool( ip )
@@ -82,7 +82,7 @@ try:
   clip = FPClip( pool )
   # clipid = raw_input( "Clip id: " )
   clip.open( clipid, FPLibrary.FP_OPEN_ASTREE)
-  
+
   for a in "name retention.period numfiles".split():
       clip.getDescriptionAttribute(a)
 
@@ -95,14 +95,14 @@ try:
     if not blob_id:
       break
 
-    blob_tag = FPTag(blob_id) 
+    blob_tag = FPTag(blob_id)
     if blob_tag.getBlobSize() < 1:
       blob_tag.close()
       continue
 
     print("tag: %r" % blob_tag)
 
-    file = FPFileOutputStream( outfilename + ".%s" % i)
+    file = FPFileOutputStream(outfilename + ".%s" % i)
     print("reading file from centera...")
     blob_tag.blobRead( file.stream, 0 )
     print("ok")
@@ -113,7 +113,7 @@ try:
   clip.close()
   pool.close()
 
-  
+
 except FPClientException, c:
   print c
   traceback.print_exc(file=sys.stdout)

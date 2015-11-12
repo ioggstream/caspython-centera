@@ -19,11 +19,12 @@ CLIP_ATTRIBUTES = ['refid', 'name', 'modification.date', 'totalsize', 'clusterid
 HOST = "192.168.26.7"
 context = type('TestContext', (object,), {})
 
+
 @contextlib.contextmanager
 def make_temp_directory():
     temp_dir = tempfile.mkdtemp()
     yield temp_dir
-    shutil.rmtree(temp_dir, )
+    shutil.rmtree(temp_dir)
 
 
 class TestConnector(object):
@@ -43,7 +44,8 @@ class TestConnector(object):
 
         clip = self.connection.get(clip_id)
         assert clip.attributes
-        assert all(clip.attributes.get(a) for a in CLIP_ATTRIBUTES)
+        for a in CLIP_ATTRIBUTES:
+            assert a in clip.attributes, "Missing attribute %r" % a
 
     @raises(KeyError)
     def test_get_missing(self):
@@ -91,7 +93,6 @@ class TestConnector(object):
         print(clip_id, clip.attributes, clip.tags)
         for k, v in expected_attributes.items():
             assert_equal(clip.attributes.get(k), v)
-
 
     def test_put_many_small(self):
         expected_attributes = {

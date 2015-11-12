@@ -21,6 +21,7 @@ from Filepool.FPFileOutputStream import FPFileOutputStream
 from Filepool.FPBufferOutputStream import FPBufferOutputStream
 from contextlib import closing
 from os.path import normpath, abspath, basename, isfile, isdir
+import logging
 
 POOL_DEFAULT_OPTIONS = {
     FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD: 100 * 1024L
@@ -28,6 +29,7 @@ POOL_DEFAULT_OPTIONS = {
 
 
 class CenteraConnection(object):
+
     """
     Manage the clips from a pool.
     :param object:
@@ -42,6 +44,7 @@ class CenteraConnection(object):
         :param application: a couple (appname, version) attached to the clip_id
         :return:
         """
+        self.log = logging.getLogger()
         self.pool = FPPool(pool_ip)
         for k, v in options.items():
             self.pool.setGlobalOption(k, v)
@@ -50,6 +53,9 @@ class CenteraConnection(object):
         self.pool.getPoolInfo()
         # the application will be attached to the clip id
         self.pool.registerApplication(*application)
+
+    def close(self):
+        self.pool.close()
 
     def put(self, clip_name, files, retention_sec):
         """
@@ -64,13 +70,17 @@ class CenteraConnection(object):
             clip.setRetentionPeriod(long(retention_sec))
             top_handle = clip.getTopTag()
             for filename in files:
-                filename = filename.replace("@", "_")
-                with closing(FPTag(top_handle, "mytag_" + basename(filename))) as blob_tag:
+                tag_name = self.clean_tag(filename)
+                with closing(FPTag(top_handle,  tag_name)) as blob_tag:
                     with closing(FPFileInputStream(filename, 16 * 1024)) as fh:
                         blob_tag.blobWrite(fh.stream, 0)
             clip_id = clip.write()
 
         return clip_id
+
+    @staticmethod
+    def clean_tag(filename):
+        return "mytag_" + basename(filename).replace("@", "_")
 
     def get(self, clip_id, tag=None):
         """
@@ -82,12 +92,7 @@ class CenteraConnection(object):
         :return:
         """
         with closing(FPClip(self.pool, close_retries=3 if tag else 0)) as clip:
-            try:
-                clip.open(clip_id)
-            except FPClientException as e:
-                if e.errorString == 'FP_PARAM_ERR':
-                    raise KeyError("Wrong parameter detected or ClipID not found: %r" % clip_id)
-                raise
+            self._open_or_not_found(clip, clip_id)
 
             clip.attributes = clip.getDescriptionAttributes()
             if tag:
@@ -104,12 +109,7 @@ class CenteraConnection(object):
         :return:
         """
         with closing(FPClip(self.pool, close_retries=3 if tag else 0)) as clip:
-            try:
-                clip.open(clip_id)
-            except FPClientException as e:
-                if e.errorString == 'FP_PARAM_ERR':
-                    raise KeyError("Wrong parameter detected or ClipID not found: %r" % clip_id)
-                raise
+            self._open_or_not_found(clip, clip_id)
 
             clip.attributes = clip.getDescriptionAttributes()
             if tag:
@@ -126,31 +126,35 @@ class CenteraConnection(object):
         """
         outfile = normpath(abspath(outfile))
         with closing(FPClip(self.pool, close_retries=3)) as clip:
-            try:
-                clip.open(clip_id)
-            except FPClientException as e:
-                if e.errorString == 'FP_PARAM_ERR':
-                    raise KeyError("Wrong parameter detected or ClipID not found: %r" % clip_id)
-                raise
+            self._open_or_not_found(clip, clip_id)
 
-            for i in range(clip.getNumBlobs() + 1):
-                blob_id = clip.fetchNext()
-                if not blob_id:
-                    break
+            for blob_id in clip.getBlobs():
                 with closing(FPTag(blob_id)) as blob_tag:
-                    tag_name_l = blob_tag.getTagName()
-                    print("tag:", blob_tag, tag_name_l)
-                    if tag_name_l != tag_name:
+                    blob_tag_name = blob_tag.getTagName()
+                    if blob_tag_name != tag_name:
+                        self.log.debug(
+                            "Skipping tag: %s when looking for: %s", blob_tag_name, blob_tag)
                         continue
 
                     if blob_tag.getBlobSize() < 1:
-                        print("Empty blob %s" % i)
+                        self.log.debug("Empty blob %s" % blob_tag_name)
                         raise ValueError()
 
                     with closing(FPFileOutputStream(outfile)) as fh:
+                        self.log.info(
+                            "Writing blob %s to %s", blob_tag_name, outfile)
                         blob_tag.blobRead(fh.stream, 0)
 
                     return outfile
+
+    def _open_or_not_found(self, clip, clip_id):
+        try:
+            clip.open(clip_id)
+        except FPClientException as e:
+            if e.errorString == 'FP_PARAM_ERR':
+                raise KeyError(
+                    "Wrong parameter detected or ClipID not found: %r" % clip_id)
+            raise
 
     def list(self, start=None, end=None):
         """

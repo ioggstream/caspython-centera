@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -33,7 +33,7 @@
 #   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
 import os
 import platform
@@ -64,9 +64,9 @@ native = Extension('FPNative',
                    define_macros=[('POSIX', '1')])
 
 setup(name='Filepool',
-      version='1.1',
-      author='Stephen Hu',
-      author_email='hu_stephen@emc.com',
+      version='1.2',
+      author='Stephen Hu, Roberto Polli',
+      author_email='hu_stephen@emc.com, roberto.polli@par-tec.it',
       description='This is a centera binding.',
       packages=["Filepool"],
       ext_modules=[native])
