@@ -26,17 +26,16 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
 #########################################################################
 
 import sys, traceback, time
-sys.path.append("/home/legrec/legacyrecorder-python-api/caspython/src/build/lib.linux-x86_64-2.7")
 
 
 from Filepool.FPLibrary import FPLibrary
@@ -64,9 +63,9 @@ try:
   queryExpression = FPQueryExpression()
   queryExpression.setType( FPLibrary.FP_QUERY_TYPE_EXISTING )
   # 1371735529
-  ts = int( time.time() - 15*sec_in_day) # 
+  ts = int( time.time() - 15*sec_in_day) #
   queryExpression.setStartTime(ts)
-  
+
   query = FPQuery( pool )
   query.open( queryExpression )
   queryExpression.close()
@@ -93,7 +92,7 @@ try:
   query.close()
   pool.close()
 
-  
+
 except FPClientException, c:
   print c
   traceback.print_exc(file=sys.stdout)

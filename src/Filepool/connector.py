@@ -1,6 +1,11 @@
 """
 Wrapper class for managing clips on centera.
 """
+from contextlib import closing
+from os.path import normpath, abspath, basename, isfile, isdir
+import logging
+from time import sleep
+
 from Filepool.FPPool import FPPool
 from Filepool.FPLibrary import FPLibrary
 from Filepool.FPQueryExpression import FPQueryExpression
@@ -19,13 +24,14 @@ from Filepool.FPBufferInputStream import FPBufferInputStream
 from Filepool.FPRetention import FPRetention
 from Filepool.FPFileOutputStream import FPFileOutputStream
 from Filepool.FPBufferOutputStream import FPBufferOutputStream
-from contextlib import closing
-from os.path import normpath, abspath, basename, isfile, isdir
-import logging
+from Filepool.util import str_to_seconds
+
+SEC_TO_MILLISEC = 1000
 
 POOL_DEFAULT_OPTIONS = {
     FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD: 100 * 1024L
 }
+
 
 
 class CenteraConnection(object):
@@ -44,7 +50,7 @@ class CenteraConnection(object):
         :param application: a couple (appname, version) attached to the clip_id
         :return:
         """
-        self.log = logging.getLogger()
+        self.log = logging.getLogger(__name__)
         self.pool = FPPool(pool_ip)
         for k, v in options.items():
             self.pool.setGlobalOption(k, v)
@@ -55,7 +61,16 @@ class CenteraConnection(object):
         self.pool.registerApplication(*application)
 
     def close(self):
-        self.pool.close()
+        for i in range(3):
+            try:
+                self.pool.close()
+                return
+            except FPClientException as e:
+                if e.errorString == 'FP_OBJECTINUSE_ERR':
+                    self.log.error("Closing while pool still in use. Sleeping for 1 sec.")
+                    sleep(1)
+                    continue
+                raise
 
     def put(self, clip_name, files, retention_sec):
         """
@@ -156,11 +171,69 @@ class CenteraConnection(object):
                     "Wrong parameter detected or ClipID not found: %r" % clip_id)
             raise
 
-    def list(self, start=None, end=None):
+    def list(self, start=None, end=None, limit=0):
         """
-        List clips in the given interval.
+        Retrieve clips in the given interval.
+        NOTE: Once iterated, the result is closed, so you cannot access the
+        item any more!
+
+
+        @see https://www.emc.com/collateral/TechnicalDocument/docu59169.pdf
         :param start:
         :param end:
+        :param limit: max number of entries to retrieve. default 0 (unlimited).
         :return:
         """
-        raise NotImplementedError
+        # 0 means unlimited.
+        if limit == 0:
+            limit = -1
+
+        # Open and close FPQuery
+        with closing(self._open_query(start, end)) as query:
+            status = 0
+            while limit != 0:
+                # Implements point 5-7 opening and closing the FPQueryResult.
+                with closing(FPQueryResult(query.fetchResult(0))) as res:
+                    status = res.getResultCode()
+
+                    if status in (
+                        FPLibrary.FP_QUERY_RESULT_CODE_END,
+                        FPLibrary.FP_QUERY_RESULT_CODE_ABORT,
+                        FPLibrary.FP_QUERY_RESULT_CODE_ERROR,
+                        FPLibrary.FP_QUERY_RESULT_CODE_INCOMPLETE,
+                        FPLibrary.FP_QUERY_RESULT_CODE_COMPLETE
+                    ):
+                        break
+                    elif status == FPLibrary.FP_QUERY_RESULT_CODE_PROGRESS:
+                        continue
+                    elif status == FPLibrary.FP_QUERY_RESULT_CODE_OK:
+                        limit -= 1
+                        # Implements point 6
+                        yield res
+
+    def _open_query(self, start=None, end=None, qtype=FPLibrary.FP_QUERY_TYPE_EXISTING):
+        """
+        Open a FPQuery and its associated QueryExpression as stated in the doc.
+        The caller is in charge of closing the query.
+
+        Implements points 1, 2, 3, 4, 10 of https://www.emc.com/collateral/TechnicalDocument/docu59169.pdf
+
+        :param start:
+        :param end:
+        :param qtype:
+        :return:
+        """
+        query_expression = FPQueryExpression()
+        query_expression.setType(qtype)
+        if start:
+            query_expression.setStartTime(str_to_seconds(start) * SEC_TO_MILLISEC)
+        if end:
+            query_expression.setEndTime(str_to_seconds(end) * SEC_TO_MILLISEC)
+
+        try:
+            query = FPQuery(self.pool)
+            query.open(query_expression)
+            return query
+        finally:
+            query_expression.close()
+

@@ -1,0 +1,5 @@
+#
+# Requirements for caspython-centera
+#
+nose
+python-dateutil

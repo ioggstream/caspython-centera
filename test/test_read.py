@@ -53,7 +53,7 @@ from Filepool.FPTag import FPTag
 from Filepool.FPFileOutputStream import FPFileOutputStream
 from Filepool.FPRetention import FPRetention
 
-from setup import pool_ip
+from setup import POOL_ADDRESS
 from setup import clipid
 from setup import TestCentera
 

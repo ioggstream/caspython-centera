@@ -2,12 +2,14 @@
 Test for CRUD methods.
 """
 import contextlib
-from connector import CenteraConnection
+from Filepool.connector import CenteraConnection
 from nose.tools import *
-from os.path import isfile, basename, dirname
+from os.path import isfile, basename
 import tempfile
 import shutil
 import os
+from setup import log, POOL_ADDRESS
+
 POOL_INFO = (
 "infoVersion", "capacity", "freeSpace", "clusterid", "clusterName", "version", "replicaAddress",)
 
@@ -16,7 +18,6 @@ CLIP_ATTRIBUTES = ['refid', 'name', 'modification.date', 'totalsize', 'clusterid
                        'modification.poolid', 'numtags', 'creation.profile', 'type', 'sdk.version',
                        'clip.naming.scheme']
 
-HOST = "192.168.26.7"
 context = type('TestContext', (object,), {})
 
 
@@ -30,7 +31,7 @@ def make_temp_directory():
 class TestConnector(object):
 
     def setup(self):
-        self.connection = CenteraConnection(HOST)
+        self.connection = CenteraConnection(POOL_ADDRESS)
 
     def teardown(self):
         self.connection.pool.close()
@@ -118,4 +119,3 @@ class TestConnector(object):
         #  FIXME: check filename normalization.
         for f in files:
             assert "mytag_" + basename(f) in dict(clip.tags), "%r %r" % (dict(clip.tags).keys(), basename(f))
-

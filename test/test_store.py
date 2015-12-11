@@ -48,7 +48,7 @@ from Filepool.FPTag import FPTag
 from Filepool.FPFileInputStream import FPFileInputStream
 from Filepool.FPBufferInputStream import FPBufferInputStream
 from Filepool.FPRetention import FPRetention
-from setup import pool_ip
+from setup import POOL_ADDRESS
 from setup import clipid
 from setup import TestCentera
 import time

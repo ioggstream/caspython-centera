@@ -34,10 +34,11 @@
 #   USA
 #
 #
-
+import logging
 import FPNative
-
 from FPLibrary import FPLibrary
+
+log = logging.getLogger(__name__)
 
 
 class FPPool(FPLibrary):
@@ -54,18 +55,34 @@ class FPPool(FPLibrary):
     context = 0
 
     def __init__(self, address):
-
+        """
+        TODO: should I open the pool here?
+        :param address:
+        :return:
+        """
+        self._opened = False
         self.open(address)
 
     def open(self, address):
 
         self.handle = FPNative.pool_open(address)
         self.check_error()
+        self._opened = True
 
-    def close(self):
-
-        FPNative.pool_close(self.handle)
-        self.check_error()
+    def close(self, force=False):
+        """
+        Deallocate pool resources.
+        :param force: issue pool_close without checking if the pool is closed.
+        :return:
+        """
+        if self._opened or force:
+            log.debug("Closing pool with handle: %r", self.handle)
+            FPNative.pool_close(self.handle)
+            self.check_error()
+            self._opened = False
+            log.debug("Pool correctly closed: %r", self.handle)
+        else:
+            log.warning("Trying to close an already closed pool at handle %r.", self.handle)
 
     def setGlobalOption(self, name, value):
 

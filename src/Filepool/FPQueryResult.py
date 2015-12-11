@@ -34,6 +34,8 @@
 #   USA
 #
 #
+import logging
+log = logging.getLogger(__name__)
 
 import FPNative
 
@@ -45,11 +47,11 @@ class FPQueryResult(FPLibrary):
     handle = 0L
 
     def __init__(self, handle):
-
+        log.debug("Create %r", self)
         self.handle = handle
 
     def close(self):
-
+        log.debug("Closing %r", self)
         FPNative.query_result_close(self.handle)
         self.check_error()
 

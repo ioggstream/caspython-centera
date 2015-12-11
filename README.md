@@ -22,6 +22,10 @@ Download and unpack the Centera SDK 3.1 or above.
     export PYTHONPATH+=:$(echo $PWD/src/build/lib.*)
     (cd src && python setup.py install; )
 
+If using sudo, run:
+
+    (cd src && sudo CENTERA_HOME=$CENTERA_HOME python setup.py install; )
+
 
 ## Develop
 

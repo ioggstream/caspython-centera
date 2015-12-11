@@ -3,10 +3,13 @@
     Author: roberto.polli@babel.it
 """
 import logging
-log = logging.getLogger("centera.test")
 from Filepool.FPPool import FPPool
 from Filepool.FPLibrary import FPLibrary
-pool_ip = "192.168.26.7"
+
+logging.basicConfig()
+log = logging.getLogger("centera.test")
+
+POOL_ADDRESS = "192.168.26.7"
 clipid = "87PM8IPQE1IQAeFMB3ED6RGLDDHG418DHCIKO90P1GND50REQ4J0S"
 
 """
@@ -26,7 +29,7 @@ class TestCentera(object):
 
     def setup(self):
 
-        self.pool = FPPool(pool_ip)
+        self.pool = FPPool(POOL_ADDRESS)
         self.pool.setGlobalOption(FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
                                   100 * 1024)
         self.pool.getPoolInfo()

@@ -34,6 +34,8 @@
 #   USA
 #
 #
+import logging
+log = logging.getLogger(__name__)
 
 import FPNative
 
@@ -51,13 +53,13 @@ class FPQuery(FPLibrary):
         self.pool_handle = pool.handle
 
     def open(self, expression):
-
+        log.debug("Opening %r", self)
         self.query = FPNative.pool_query_open(
             self.pool_handle, expression.handle)
         self.check_error()
 
     def close(self):
-
+        log.debug("Closing %r", self)
         FPNative.pool_query_close(self.query)
         self.check_error()
 

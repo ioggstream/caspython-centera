@@ -57,7 +57,6 @@ try:
                will override what is set through environment variable.
   """
 
-  sys.path.append("/home/legrec/legacyrecorder-python-api/caspython/src/build/lib.linux-x86_64-2.6")
   from Filepool.FPLibrary import FPLibrary
   from Filepool.FPPool import FPPool
   from Filepool.FPException import FPException
