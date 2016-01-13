@@ -70,18 +70,18 @@ class TestCenteraRead(TestCentera):
 
             with closing(FPClip(self.pool, clip_name, close_retries=3)) as clip:
                 clipid = self.write_clip(clip, filename, retention_sec, top_tag)
-                print clipid
+                print(clipid)
 
             self.assert_clip_name(clipid, filename)
-        except FPClientException, c:
-            print c
+        except FPClientException as c:
+            print(c)
             traceback.print_exc(file=sys.stdout)
-        except FPServerException, s:
-            print s
-        except FPNetException, n:
-            print n
-        except FPException, e:
-            print e
+        except FPServerException as s:
+            print(s)
+        except FPNetException as n:
+            print(n)
+        except FPException as e:
+            print(e)
 
     def assert_clip_name(self, clipid, filename):
         with closing(FPClip(self.pool, close_retries=3)) as ch:
@@ -99,7 +99,7 @@ class TestCenteraRead(TestCentera):
 
         with closing(FPClip(self.pool, clip_name, close_retries=3)) as clip:
             clipid = self.write_clip(clip, filename, retention_sec, top_tag)
-            print clipid
+            print(clipid)
 
     def test_store_many(self):
         retention_sec = 100

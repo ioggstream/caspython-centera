@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,48 +26,45 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
-import sys, traceback
+import sys
+import traceback
 
-from Filepool.FPLibrary import FPLibrary
-from Filepool.FPPool import FPPool
-from Filepool.FPException import FPException
-from Filepool.FPNetException import FPNetException
-from Filepool.FPServerException import FPServerException
 from Filepool.FPClientException import FPClientException
-from Filepool.FPClip import FPClip
-from Filepool.FPTag import FPTag
-from Filepool.FPFileOutputStream import FPFileOutputStream
-from Filepool.FPRetention import FPRetention
+from Filepool.FPException import FPException
+from Filepool.FPLibrary import FPLibrary
+from Filepool.FPNetException import FPNetException
+from Filepool.FPPool import FPPool
+from Filepool.FPServerException import FPServerException
 
 try:
 
-  ip = raw_input( "Pool address: " )
+    ip = raw_input("Pool address: ")
 
-  pool = FPPool( ip )
+    pool = FPPool(ip)
 
-  pool.setGlobalOption( FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
-    100 * 1024 )
+    pool.setGlobalOption(FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
+                         100 * 1024)
 
-  print pool.getComponentVersion( FPLibrary.FP_VERSION_FPLIBRARY_DLL )
+    print pool.getComponentVersion(FPLibrary.FP_VERSION_FPLIBRARY_DLL)
 
-  pool.close()
+    pool.close()
 
-  
+
 except FPClientException, c:
-  print c
-  traceback.print_exc(file=sys.stdout)
+    print c
+    traceback.print_exc(file=sys.stdout)
 except FPServerException, s:
-  print s
+    print s
 except FPNetException, n:
-  print n
+    print n
 except FPException, e:
-  print e
+    print e

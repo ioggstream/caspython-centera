@@ -103,14 +103,14 @@ class TestCenteraRead(TestCentera):
                     break
 
                 blob_tag = FPTag(blob_id)
-                print("tag: %r" % blob_tag)
+                print(("tag: %r" % blob_tag))
                 if blob_tag.getBlobSize() < 1:
-                    print("Empty blob %s" % i)
+                    print(("Empty blob %s" % i))
                     blob_tag.close()
                     continue
 
                 outfilename = blob_tag.getTagName()
-                print("tag name : %s" % outfilename)
+                print(("tag name : %s" % outfilename))
                 fh = FPFileOutputStream(
                     "outfile.{name}.{i}".format(name=outfilename, i=i))
                 print("reading file from centera...")

@@ -1,12 +1,26 @@
-caspython-centera
-=================
+# caspython-centera
 
-EMC Centera Python Wrapper. See LICENSE.txt for further details.
+EMC Centera Python Wrapper with a user-friendly CenteraConnector interface.
 
-## Centera Garbage collection & shredding
 
-https://community.emc.com/message/518033
-https://community.emc.com/docs/DOC-7853
+## Usage
+
+Connecting to Centera is easy thanks to CenteraConnector.
+
+    from Filepool.connector import CenteraConnector
+    
+    # Connect to a pool.
+    pool = CenteraConnector('192.168.1.1,192.168.1.2')
+    
+    # Put many files.
+    clip_id = pool.put("put_one_file", files=["file1.txt", "file2.txt"], retention_sec=10)
+    
+    # Get clip metadata.
+    clip = self.connection.get(clip_id, tag=True)
+    print(clip.attributes)
+    
+    # Close pool.
+    pool.close()
 
 
 
@@ -32,7 +46,10 @@ If using sudo, run:
 Setup the enviroment for using the local build and your test environment
 
     export CENTERA_PEA_LOCATION=$PWD/stage_pool.pea
-    pip install requirements.txt
-    nosetest -v -w test
+    tox
 
 
+## Centera Garbage collection & shredding
+
+https://community.emc.com/message/518033
+https://community.emc.com/docs/DOC-7853

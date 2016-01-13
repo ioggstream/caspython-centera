@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -33,72 +33,67 @@
 #   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
-import sys, traceback, time
+import sys
+import time
+import traceback
 
-
-from Filepool.FPLibrary import FPLibrary
-from Filepool.FPPool import FPPool
-from Filepool.FPException import FPException
-from Filepool.FPNetException import FPNetException
-from Filepool.FPServerException import FPServerException
 from Filepool.FPClientException import FPClientException
-from Filepool.FPClip import FPClip
-from Filepool.FPTag import FPTag
-from Filepool.FPFileOutputStream import FPFileOutputStream
-from Filepool.FPRetention import FPRetention
-from Filepool.FPMonitor import FPMonitor
+from Filepool.FPException import FPException
+from Filepool.FPLibrary import FPLibrary
+from Filepool.FPNetException import FPNetException
+from Filepool.FPPool import FPPool
 from Filepool.FPQuery import FPQuery
 from Filepool.FPQueryExpression import FPQueryExpression
 from Filepool.FPQueryResult import FPQueryResult
-
-
+from Filepool.FPServerException import FPServerException
+from Filepool.util import parse_config
 
 try:
-  sec_in_day = 86400
-  ip = "192.168.26.7" # raw_input( "Pool address: " )
+    sec_in_day = 86400
+    ip = raw_input( "Pool address: " ) or parse_config('test/test.ini')
 
-  pool = FPPool( ip )
-  queryExpression = FPQueryExpression()
-  queryExpression.setType( FPLibrary.FP_QUERY_TYPE_EXISTING )
-  # 1371735529
-  ts = int( time.time() - 15*sec_in_day) #
-  queryExpression.setStartTime(ts)
+    pool = FPPool(ip)
+    queryExpression = FPQueryExpression()
+    queryExpression.setType(FPLibrary.FP_QUERY_TYPE_EXISTING)
+    # 1371735529
+    ts = int(time.time() - 15 * sec_in_day)
+    queryExpression.setStartTime(ts)
 
-  query = FPQuery( pool )
-  query.open( queryExpression )
-  queryExpression.close()
+    query = FPQuery(pool)
+    query.open(queryExpression)
+    queryExpression.close()
 
-  status = 0
-  while True:
+    status = 0
+    while True:
 
-    res = FPQueryResult(query.fetchResult(0))
-    status = res.getResultCode()
+        res = FPQueryResult(query.fetchResult(0))
+        status = res.getResultCode()
 
-    if status in (
-        FPLibrary.FP_QUERY_RESULT_CODE_END,
-        FPLibrary.FP_QUERY_RESULT_CODE_ABORT,
-        FPLibrary.FP_QUERY_RESULT_CODE_ERROR,
-        FPLibrary.FP_QUERY_RESULT_CODE_INCOMPLETE,
-        FPLibrary.FP_QUERY_RESULT_CODE_COMPLETE
-    ):
-        break
-    elif status == FPLibrary.FP_QUERY_RESULT_CODE_PROGRESS:
-        continue
-    elif status == FPLibrary.FP_QUERY_RESULT_CODE_OK:
-        print res.getClipId()
+        if status in (
+            FPLibrary.FP_QUERY_RESULT_CODE_END,
+            FPLibrary.FP_QUERY_RESULT_CODE_ABORT,
+            FPLibrary.FP_QUERY_RESULT_CODE_ERROR,
+            FPLibrary.FP_QUERY_RESULT_CODE_INCOMPLETE,
+            FPLibrary.FP_QUERY_RESULT_CODE_COMPLETE
+        ):
+            break
+        elif status == FPLibrary.FP_QUERY_RESULT_CODE_PROGRESS:
+            continue
+        elif status == FPLibrary.FP_QUERY_RESULT_CODE_OK:
+            print res.getClipId()
 
-  query.close()
-  pool.close()
+    query.close()
+    pool.close()
 
 
 except FPClientException, c:
-  print c
-  traceback.print_exc(file=sys.stdout)
+    print c
+    traceback.print_exc(file=sys.stdout)
 except FPServerException, s:
-  print s
+    print s
 except FPNetException, n:
-  print n
+    print n
 except FPException, e:
-  print e
+    print e

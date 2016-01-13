@@ -37,7 +37,19 @@
 
 import os
 import platform
-from distutils.core import setup, Extension
+#from distutils.core import setup, Extension
+from setuptools import setup, Extension, find_packages
+
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'markdown')
+except(IOError, ImportError):
+    long_description = open('README.md').read()
+
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
+
 
 
 def get_bitsize():
@@ -56,7 +68,7 @@ extra_compile_args = {
 CASHOME = os.environ['CENTERA_HOME']
 bitsize = get_bitsize()
 native = Extension('FPNative',
-                   sources=['native/pycentera.c'],
+                   sources=['src/native/pycentera.c'],
                    include_dirs=[os.path.join(CASHOME, 'include')],
                    libraries=libraries[bitsize],
                    library_dirs=[os.path.join(CASHOME, 'lib', bitsize)],
@@ -64,10 +76,20 @@ native = Extension('FPNative',
                    define_macros=[('POSIX', '1')])
 
 setup(name='Filepool',
-      version='1.3',
+      version='1.3-rc4',
       author='Stephen Hu, Roberto Polli',
       author_email='hu_stephen@emc.com, roberto.polli@par-tec.it',
+      maintainer='Roberto Polli',
+      maintainer_email='roberto.polli@par-tec.it',
+      license=open('LICENSE.txt').read(),
+      download_url='https://github.com/ioggstream/caspython-centera',
       url='https://github.com/ioggstream/caspython-centera',
-      description='This is a centera binding.',
-      packages=["Filepool"],
+      description='EMC Centera Content Addressable Storage binding library.',
+      long_description=long_description,
+      packages=find_packages("src"),
+      package_dir={"":"src"},
+      provides=['Filepool'],
+      install_requires=requirements,
+      include_package_data=True,
+      keywords=['centera', 'cas', 'linux', 'emc', 'worm'],
       ext_modules=[native])

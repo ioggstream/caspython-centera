@@ -5,12 +5,14 @@
 import logging
 from Filepool.FPPool import FPPool
 from Filepool.FPLibrary import FPLibrary
+from Filepool.util import parse_config
 
 logging.basicConfig()
 log = logging.getLogger("centera.test")
 
-POOL_ADDRESS = "192.168.26.7"
-clipid = "87PM8IPQE1IQAeFMB3ED6RGLDDHG418DHCIKO90P1GND50REQ4J0S"
+CONFIG = parse_config('test.ini')
+POOL_ADDRESS = CONFIG['test']['pool_address']
+clipid =  CONFIG['test']['clipid']
 
 """
 except FPClientException, c:

@@ -3,4 +3,16 @@
 *.o
 core*
 build
+dist
+MANIFEST
+.coverage
+.idea
+.tox
+.project
+.pydevproject
+src/*.so
+*.egg-info
+*pea
+
+
 

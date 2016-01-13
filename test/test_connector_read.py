@@ -87,6 +87,15 @@ def test_parse_date():
 
 
 def test_parse_dayonly():
-    for day in ('5', '05', '1205'):
+    for day in ('5', '05'):
         seconds = str_to_seconds(day)
         yield assert_true, seconds
+
+
+def test_parse_dayonly_unsupported():
+    for day in ('1205', '0512'):
+        try:
+            seconds = str_to_seconds(day)
+            assert False, "Should raise ValueError: %r" % day
+        except ValueError:
+            pass

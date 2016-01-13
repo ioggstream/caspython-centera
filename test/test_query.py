@@ -54,7 +54,7 @@ class TestCenteraQuery(TestCentera):
             elif status == FPLibrary.FP_QUERY_RESULT_CODE_PROGRESS:
                 continue
             elif status == FPLibrary.FP_QUERY_RESULT_CODE_OK:
-                print res.getClipId()
+                print(res.getClipId())
 
         query.close()
 
