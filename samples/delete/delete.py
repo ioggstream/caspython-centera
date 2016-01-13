@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,86 +26,86 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
-import sys, traceback
+import sys
+import traceback
 
-from Filepool.FPLibrary import FPLibrary
-from Filepool.FPPool import FPPool
-from Filepool.FPException import FPException
-from Filepool.FPNetException import FPNetException
-from Filepool.FPServerException import FPServerException
 from Filepool.FPClientException import FPClientException
 from Filepool.FPClip import FPClip
-from Filepool.FPTag import FPTag
-from Filepool.FPFileInputStream import FPFileInputStream
-from Filepool.FPBufferInputStream import FPBufferInputStream
-from Filepool.FPRetention import FPRetention
+from Filepool.FPException import FPException
+from Filepool.FPLibrary import FPLibrary
+from Filepool.FPNetException import FPNetException
+from Filepool.FPPool import FPPool
+from Filepool.FPServerException import FPServerException
 
 try:
 
-  ip = raw_input( "Pool address: " )
+    ip = raw_input("Pool address: ")
 
-  pool = FPPool( ip )
+    pool = FPPool(ip)
 
-  pool.registerApplication( "python wrapper delete example", "1.0" )
+    pool.registerApplication("python wrapper delete example", "1.0")
 
-  d = pool.getCapability( FPLibrary.FP_DELETE,
-    FPLibrary.FP_ALLOWED )
+    d = pool.getCapability(FPLibrary.FP_DELETE,
+                           FPLibrary.FP_ALLOWED)
 
-  print d
+    print d
 
-  if(d):
- 
-    clip = FPClip( pool )
+    if(d):
 
-    ca = raw_input( "Content address: " )
+        clip = FPClip(pool)
 
-    audited = raw_input( "(a)udited/(n)ormal: " )
+        ca = raw_input("Content address: ")
 
-    if audited in ['a','A']:
+        audited = raw_input("(a)udited/(n)ormal: ")
 
-      reason = raw_input( "Reason string: " )
-      priv   = raw_input( "(p)rivileged/(n)ormal: " )
+        if audited in ['a', 'A']:
 
-      if( priv in ['p','P'] ):
-        clip.auditedDelete( ca, reason, FPLibrary.FP_OPTION_DELETE_PRIVILEGED )
-      elif( priv in ['n','N']):
-        clip.auditedDelete( ca, reason, FPLibrary.FP_OPTION_DEFAULT_OPTIONS )
+            reason = raw_input("Reason string: ")
+            priv = raw_input("(p)rivileged/(n)ormal: ")
 
-      else:
-        print "invalid option"
+            if(priv in ['p', 'P']):
+                clip.auditedDelete(
+                    ca, reason, FPLibrary.FP_OPTION_DELETE_PRIVILEGED)
+            elif(priv in ['n', 'N']):
+                clip.auditedDelete(
+                    ca, reason, FPLibrary.FP_OPTION_DEFAULT_OPTIONS)
 
-    elif audited in ['n','N']:
+            else:
+                print "invalid option"
 
-      response = raw_input( "Clip will be deleted forever, are you certain? (y/n): " )
+        elif audited in ['n', 'N']:
 
-      if response in ['y','Y']:
-        clip.delete(ca)
-        print "Clip " + ca + " has been deleted"
-      else:
-        print "Deletion aborted"
+            response = raw_input(
+                "Clip will be deleted forever, are you certain? (y/n): ")
 
-  else:
+            if response in ['y', 'Y']:
+                clip.delete(ca)
+                print "Clip " + ca + " has been deleted"
+            else:
+                print "Deletion aborted"
 
-    print "Deletes capability not enabled."
+    else:
 
-  pool.close()
+        print "Deletes capability not enabled."
 
-  
+    pool.close()
+
+
 except FPClientException, c:
-  print c
-  traceback.print_exc(file=sys.stdout)
+    print c
+    traceback.print_exc(file=sys.stdout)
 except FPServerException, s:
-  print s
+    print s
 except FPNetException, n:
-  print n
+    print n
 except FPException, e:
-  print e
+    print e

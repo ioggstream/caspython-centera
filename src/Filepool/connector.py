@@ -5,6 +5,7 @@ from contextlib import closing
 from os.path import normpath, abspath, basename, isfile, isdir
 import logging
 from time import sleep
+import re
 
 from Filepool.FPPool import FPPool
 from Filepool.FPLibrary import FPLibrary
@@ -26,13 +27,20 @@ from Filepool.FPFileOutputStream import FPFileOutputStream
 from Filepool.FPBufferOutputStream import FPBufferOutputStream
 from Filepool.util import str_to_seconds
 
+
+# Customize mytag to override issues in tag names (eg. eclip).s
+#MYTAG_ = "mytag_"
+MYTAG_ = ""
+
 SEC_TO_MILLISEC = 1000
 
 POOL_DEFAULT_OPTIONS = {
     FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD: 100 * 1024L
 }
-
-
+RE_INVALID_TAGS = [
+    (re.compile(r'^[^a-zA-Z]'), 'TAG must start with a letter.'),
+    (re.compile(r'^eclip'), 'TAG starting with "eclip" are reserved for internal Centera use.'),
+]
 
 class CenteraConnection(object):
 
@@ -42,12 +50,13 @@ class CenteraConnection(object):
     :return:
     """
 
-    def __init__(self, pool_ip, options=POOL_DEFAULT_OPTIONS, application=("caspython-centera-library", "1.0")):
+    def __init__(self, pool_ip, options=POOL_DEFAULT_OPTIONS, application=("caspython-centera-library", "1.3-rc1"), replace=None):
         """
         Initialize a pool
         :param host:
         :param options:
         :param application: a couple (appname, version) attached to the clip_id
+        :param replace: a translation map for replacing unsupported characters
         :return:
         """
         self.log = logging.getLogger(__name__)
@@ -81,6 +90,9 @@ class CenteraConnection(object):
         :param retention_sec:
         :return:
         """
+        for f in files:
+            self.validate_tag(f)
+
         with closing(FPClip(self.pool, clip_name, close_retries=3)) as clip:
             clip.setRetentionPeriod(long(retention_sec))
             top_handle = clip.getTopTag()
@@ -94,8 +106,20 @@ class CenteraConnection(object):
         return clip_id
 
     @staticmethod
+    def validate_tag(filename):
+        """
+        Check if a filename is a valid centera tag name.
+        :param filename:
+        :return: None on succes
+        :raises: ValueError if not valid
+        """
+        for re_m, msg in RE_INVALID_TAGS:
+            if re_m.match(CenteraConnection.clean_tag(filename)):
+                raise ValueError(msg)
+
+    @staticmethod
     def clean_tag(filename):
-        return "mytag_" + basename(filename).replace("@", "_")
+        return MYTAG_ + basename(filename)  # .replace("@", "_")
 
     def get(self, clip_id, tag=None):
         """

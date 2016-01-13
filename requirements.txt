@@ -2,4 +2,6 @@
 # Requirements for caspython-centera
 #
 nose
+coverage
+nose-cover3
 python-dateutil

@@ -64,7 +64,7 @@ native = Extension('FPNative',
                    define_macros=[('POSIX', '1')])
 
 setup(name='Filepool',
-      version='1.3',
+      version='1.3-rc1',
       author='Stephen Hu, Roberto Polli',
       author_email='hu_stephen@emc.com, roberto.polli@par-tec.it',
       url='https://github.com/ioggstream/caspython-centera',

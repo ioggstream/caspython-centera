@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -26,75 +26,74 @@
 #  version 2 along with Python wrapper; see the file COPYING. If not,
 #  write to:
 #
-#   EMC Corporation 
-#   Centera Open Source Intiative (COSI) 
+#   EMC Corporation
+#   Centera Open Source Intiative (COSI)
 #   80 South Street
 #   1/W-1
-#   Hopkinton, MA 01748 
+#   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
-import sys, traceback
+import sys
+import traceback
 
-from Filepool.FPLibrary import FPLibrary
-from Filepool.FPPool import FPPool
-from Filepool.FPException import FPException
-from Filepool.FPNetException import FPNetException
-from Filepool.FPServerException import FPServerException
 from Filepool.FPClientException import FPClientException
 from Filepool.FPClip import FPClip
-from Filepool.FPTag import FPTag
+from Filepool.FPException import FPException
 from Filepool.FPFileInputStream import FPFileInputStream
-from Filepool.FPBufferInputStream import FPBufferInputStream
-from Filepool.FPRetention import FPRetention
+from Filepool.FPLibrary import FPLibrary
+from Filepool.FPNetException import FPNetException
+from Filepool.FPPool import FPPool
+from Filepool.FPServerException import FPServerException
+from Filepool.FPTag import FPTag
 
 try:
 
-  ip = raw_input( "Pool address: " )
+    ip = raw_input("Pool address: ")
 
-  pool = FPPool( ip )
+    pool = FPPool(ip)
 
-  pool.setGlobalOption( FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
-    100 * 1024 )
+    pool.setGlobalOption(FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
+                         100 * 1024)
 
-  pool.getPoolInfo()
+    pool.getPoolInfo()
 
-  pool.registerApplication( "python wrapper store example", "1.0" )
+    pool.registerApplication("python wrapper store example", "1.0")
 
-  clip = FPClip( pool, "python store example" )
+    clip = FPClip(pool, "python store example")
 
-  retention = raw_input( "Retention (in seconds): " )
+    retention = raw_input("Retention (in seconds): ")
 
-  clip.setRetentionPeriod( long(retention) )
+    clip.setRetentionPeriod(long(retention))
 
-  top_handle  = clip.getTopTag()
+    top_handle = clip.getTopTag()
 
-  blob_tag = FPTag( top_handle, "file" )
+    blob_tag = FPTag(top_handle, "file")
 
-  filename = raw_input( "Filename: " )
+    filename = raw_input("Filename: ")
 
-  file = FPFileInputStream( filename, 16*1024 )
- 
-  blob_tag.blobWrite( file.stream, 0 )
+    file = FPFileInputStream(filename, 16 * 1024)
 
-  file.close()
-  blob_tag.close()
+    blob_tag.blobWrite(file.stream, 0)
 
-  clipid = clip.write()
-  print clipid
+    file.close()
+    blob_tag.close()
 
-  clip.close()
+    clipid = clip.write()
+    print clipid
 
-  pool.close()
+    clip.close()
 
-  
+    pool.close()
+
+
 except FPClientException, c:
-  print c
-  traceback.print_exc(file=sys.stdout)
+    print c
+    traceback.print_exc(file=sys.stdout)
 except FPServerException, s:
-  print s
+    print s
 except FPNetException, n:
-  print n
+    print n
 except FPException, e:
-  print e
+    print e

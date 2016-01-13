@@ -104,7 +104,9 @@ class TestConnector(object):
 
         with make_temp_directory() as tmpdir:
             # Create 5 files to be added to the clip.
-            files = [os.path.join(tmpdir, "%d.xml" % i) for i in range(5)]
+            files = [os.path.join(tmpdir, "x%d.xml" % i) for i in range(3)]
+            files.extend([os.path.join(tmpdir, "noextension_%d" % i) for i in range(3)])
+
             for f in files:
                 with open(f, "wb") as tf:
                     tf.write("x" * 1234)
@@ -118,4 +120,42 @@ class TestConnector(object):
         # All added files should be present as tag names.
         #  FIXME: check filename normalization.
         for f in files:
-            assert "mytag_" + basename(f) in dict(clip.tags), "%r %r" % (dict(clip.tags).keys(), basename(f))
+            assert basename(f) in dict(clip.tags), "%r %r" % (dict(clip.tags).keys(), basename(f))
+
+    @raises(ValueError)
+    def test_put_unsupported_files(self):
+        expected_attributes = {
+            'retention.period': 10,
+            'name': 'test_put_one',
+            'totalsize': '1234'
+        }
+
+        with make_temp_directory() as tmpdir:
+            # Create files to be added to the clip.
+            files = [os.path.join(tmpdir, "%d.xml" % i) for i in range(3)]
+            for f in files:
+                with open(f, "wb") as tf:
+                    tf.write("x" * 1234)
+
+            clip_id = self.connection.put("test_put_many_small", files=files, retention_sec=10)
+            assert clip_id
+
+        clip = self.connection.get(clip_id, tag=True)
+        assert clip.attributes
+        print(clip_id, clip.attributes, clip.tags)
+        # All added files should be present as tag names.
+        #  FIXME: check filename normalization.
+        for f in files:
+            assert basename(f) in dict(clip.tags), "%r %r" % (dict(clip.tags).keys(), basename(f))
+
+
+def test_validate_tags():
+    def assert_invalid_tags(filename):
+        try:
+            CenteraConnection.validate_tag(filename)
+            assert False, "File is not valid: %r" % filename
+        except ValueError:
+            pass
+
+    for f in ("eclip.xml", "1.xml", "2.xml", "11111111111111.xml", "@.xml", "1@2.xml"):
+        yield assert_invalid_tags, f

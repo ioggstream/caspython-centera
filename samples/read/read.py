@@ -1,4 +1,4 @@
-#########################################################################
+#
 #
 #  Copyright (c) 2006 EMC Corporation. All Rights Reserved
 #
@@ -33,92 +33,91 @@
 #   Hopkinton, MA 01748
 #   USA
 #
-#########################################################################
+#
 
-import sys, traceback
+import sys
+import traceback
 
 try:
     from sys import argv
+
     progname, clipid, outfilename = argv[:3]
 except IndexError:
     pass
 
-
-
-
 try:
 
-  """                 /*Stores your application's name and version for registration on Centera
-               This call should be made one time, before the FPPoolOpen() call,
-               for each application that interfaces with centera
-               *
-               Applications can also be registered via the environment variables
-               FP_OPTION_APP_NAME and FP_OPTION_APP_VER The values set through API
-               will override what is set through environment variable.
-  """
+    """                 /*Stores your application's name and version for registration on Centera
+                 This call should be made one time, before the FPPoolOpen() call,
+                 for each application that interfaces with centera
+                 *
+                 Applications can also be registered via the environment variables
+                 FP_OPTION_APP_NAME and FP_OPTION_APP_VER The values set through API
+                 will override what is set through environment variable.
+    """
 
-  from Filepool.FPLibrary import FPLibrary
-  from Filepool.FPPool import FPPool
-  from Filepool.FPException import FPException
-  from Filepool.FPNetException import FPNetException
-  from Filepool.FPServerException import FPServerException
-  from Filepool.FPClientException import FPClientException
-  from Filepool.FPClip import FPClip
-  from Filepool.FPTag import FPTag
-  from Filepool.FPFileOutputStream import FPFileOutputStream
-  from Filepool.FPRetention import FPRetention
+    from Filepool.FPLibrary import FPLibrary
+    from Filepool.FPPool import FPPool
+    from Filepool.FPException import FPException
+    from Filepool.FPNetException import FPNetException
+    from Filepool.FPServerException import FPServerException
+    from Filepool.FPClientException import FPClientException
+    from Filepool.FPClip import FPClip
+    from Filepool.FPTag import FPTag
+    from Filepool.FPFileOutputStream import FPFileOutputStream
+    from Filepool.FPRetention import FPRetention
+    from Filepool.util import parse_config
 
+    config = parse_config("test/test.ini")
+    ip = raw_input("Pool address: ") or config['test']['POOL_ADDRESS']
+    clipid = clipid or config['test']['read_clipid']
+    pool = FPPool(ip)
+    pool.setGlobalOption(FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
+                         100 * 1024)
+    pool.getPoolInfo()
+    # the application will be attached to the clip id
+    pool.registerApplication("python wrapper read example", "1.0")
 
-  ip = "192.168.26.7" #raw_input( "Pool address: " )
-  clipid = "5GVU8O939OERGe1VV510G5SKVSIG418DHD4R2C05CENHRDNFDKNAG"
-  pool = FPPool( ip )
-  pool.setGlobalOption( FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD,
-    100 * 1024 )
-  pool.getPoolInfo()
-  # the application will be attached to the clip id
-  pool.registerApplication( "python wrapper read example", "1.0" )
+    clip = FPClip(pool)
+    # clipid = raw_input( "Clip id: " )
+    clip.open(clipid, FPLibrary.FP_OPEN_ASTREE)
 
-  clip = FPClip( pool )
-  # clipid = raw_input( "Clip id: " )
-  clip.open( clipid, FPLibrary.FP_OPEN_ASTREE)
+    for a in "name retention.period numfiles".split():
+        clip.getDescriptionAttribute(a)
 
-  for a in "name retention.period numfiles".split():
-      clip.getDescriptionAttribute(a)
+    top = clip.getTopTag()
+    print("tag: %r" % top)
 
+    for i in range(clip.getNumBlobs() + 1):
+        blob_id = clip.fetchNext()
+        if not blob_id:
+            break
 
-  top = clip.getTopTag()
-  print("tag: %r" % top)
+        blob_tag = FPTag(blob_id)
+        if blob_tag.getBlobSize() < 1:
+            blob_tag.close()
+            continue
 
-  for i in range(clip.getNumBlobs() + 1):
-    blob_id = clip.fetchNext()
-    if not blob_id:
-      break
+        print("tag: %r" % blob_tag)
 
-    blob_tag = FPTag(blob_id)
-    if blob_tag.getBlobSize() < 1:
-      blob_tag.close()
-      continue
+        file = FPFileOutputStream(outfilename + ".%s" % i)
+        print("reading file from centera...")
+        blob_tag.blobRead(file.stream, 0)
+        print("ok")
 
-    print("tag: %r" % blob_tag)
+        file.close()
+        blob_tag.close()
 
-    file = FPFileOutputStream(outfilename + ".%s" % i)
-    print("reading file from centera...")
-    blob_tag.blobRead( file.stream, 0 )
-    print("ok")
-
-    file.close()
-    blob_tag.close()
-
-  clip.close()
-  pool.close()
+    clip.close()
+    pool.close()
 
 
 except FPClientException, c:
-  print c
-  traceback.print_exc(file=sys.stdout)
+    print c
+    traceback.print_exc(file=sys.stdout)
 except FPServerException, s:
-  print s
+    print s
 except FPNetException, n:
-  print n
+    print n
 except FPException, e:
-  print e
+    print e
