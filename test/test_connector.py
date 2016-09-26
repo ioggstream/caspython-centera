@@ -40,6 +40,9 @@ class TestConnector(object):
         assert self.connection
         assert all(getattr(self.connection.pool, x) for x in POOL_INFO), "Missing entry in connection pool."
 
+    def test_info(self):
+        assert 'clusterid' in self.connection.info()
+
     def test_get_attributes_ok(self):
         clip_id = "035DVUIOVKS4KeBNOO59IDCTC69G41A2O2RQ1103A64Q7NPLGE3DR"
 

@@ -1,16 +1,20 @@
 # caspython-centera
 
-EMC Centera Python Wrapper with a user-friendly CenteraConnector interface.
+EMC Centera Python Wrapper with a user-friendly CenteraConnection interface.
 
 
 ## Usage
 
-Connecting to Centera is easy thanks to CenteraConnector.
+Connecting to Centera is easy thanks to CenteraConnection.
 
-    from Filepool.connector import CenteraConnector
+    from Filepool.connector import CenteraConnection
     
     # Connect to a pool.
-    pool = CenteraConnector('192.168.1.1,192.168.1.2')
+    pool = CenteraConnection('192.168.1.1,192.168.1.2')
+
+    # Get pool info.
+    infos = pool.info()
+    print("You have still {freeSpace} bytes".format(**infos))
     
     # Put many files.
     clip_id = pool.put("put_one_file", files=["file1.txt", "file2.txt"], retention_sec=10)

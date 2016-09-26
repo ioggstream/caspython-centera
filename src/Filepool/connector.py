@@ -28,6 +28,7 @@ from Filepool.FPBufferOutputStream import FPBufferOutputStream
 from Filepool.util import str_to_seconds
 
 
+_version = "1.3-rc5"
 # Customize mytag to override issues in tag names (eg. eclip).s
 #MYTAG_ = "mytag_"
 MYTAG_ = ""
@@ -50,7 +51,7 @@ class CenteraConnection(object):
     :return:
     """
 
-    def __init__(self, pool_ip, options=POOL_DEFAULT_OPTIONS, application=("caspython-centera-library", "1.3-rc1"), replace=None):
+    def __init__(self, pool_ip, options=POOL_DEFAULT_OPTIONS, application=("caspython-centera-library", _version), replace=None):
         """
         Initialize a pool
         :param host:
@@ -260,4 +261,18 @@ class CenteraConnection(object):
             return query
         finally:
             query_expression.close()
+
+    def info(self):
+        """
+        Return a dictionary with essential informations about the centera,
+        like free space, replication options, ...
+      
+        :return: dict
+        """
+
+        fields = [ 'clusterid', 'clusterName', 'version', 'infoVersion',
+                   'capacity', 'freeSpace', 'replicaAddress' ]
+        ret = dict((f, getattr(self.pool, f)) for f in fields )
+        ret['clusterTime'] = self.pool.getClusterTime()
+        return ret
 
