@@ -76,7 +76,7 @@ native = Extension('FPNative',
                    define_macros=[('POSIX', '1')])
 
 setup(name='Filepool',
-      version='1.3-rc5',
+      version='1.3rc6',
       author='Stephen Hu, Roberto Polli',
       author_email='hu_stephen@emc.com, roberto.polli@par-tec.it',
       maintainer='Roberto Polli',

@@ -28,7 +28,7 @@ from Filepool.FPBufferOutputStream import FPBufferOutputStream
 from Filepool.util import str_to_seconds
 
 
-_version = "1.3-rc5"
+_version = "1.3rc6"
 # Customize mytag to override issues in tag names (eg. eclip).s
 #MYTAG_ = "mytag_"
 MYTAG_ = ""
@@ -266,12 +266,13 @@ class CenteraConnection(object):
         """
         Return a dictionary with essential informations about the centera,
         like free space, replication options, ...
-      
+
         :return: dict
         """
 
         fields = [ 'clusterid', 'clusterName', 'version', 'infoVersion',
                    'capacity', 'freeSpace', 'replicaAddress' ]
+        self.pool.getPoolInfo()
         ret = dict((f, getattr(self.pool, f)) for f in fields )
         ret['clusterTime'] = self.pool.getClusterTime()
         return ret
