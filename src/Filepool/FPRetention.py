@@ -37,12 +37,12 @@
 
 import FPNative
 
-from FPLibrary import FPLibrary
+from Filepool.FPLibrary import FPLibrary
 
 
 class FPRetention(FPLibrary):
 
-    handle = 0L
+    handle = 0
     name = ''
     period = 0
 

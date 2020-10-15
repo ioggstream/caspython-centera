@@ -37,8 +37,8 @@
 
 import FPNative
 
-from FPLibrary import FPLibrary
-from FPException import FPException
+from Filepool.FPLibrary import FPLibrary
+from Filepool.FPException import FPException
 import time
 from Filepool.FPTag import FPTag
 import logging

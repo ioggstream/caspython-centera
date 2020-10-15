@@ -39,12 +39,13 @@ log = logging.getLogger(__name__)
 
 import FPNative
 
-from FPLibrary import FPLibrary
+from Filepool.FPLibrary import FPLibrary
+from Filepool.util import longval
 
 
 class FPQuery(FPLibrary):
 
-    pool_handle = 0L
+    pool_handle = longval(0)
     query = 0
     expression = 0
 

@@ -37,7 +37,7 @@
 
 import FPNative
 
-from FPException import FPException
+from Filepool.FPException import FPException
 
 
 class FPServerException(FPException):

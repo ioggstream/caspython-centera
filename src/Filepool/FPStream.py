@@ -37,7 +37,7 @@
 
 import FPNative
 
-from FPLibrary import FPLibrary
+from Filepool.FPLibrary import FPLibrary
 
 
 class FPStream(FPLibrary):

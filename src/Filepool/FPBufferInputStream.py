@@ -37,7 +37,7 @@
 
 import FPNative
 
-from FPStream import FPStream
+from Filepool.FPStream import FPStream
 
 
 class FPBufferInputStream(FPStream):

@@ -36,7 +36,7 @@
 #
 import logging
 import FPNative
-from FPLibrary import FPLibrary
+from Filepool.FPLibrary import FPLibrary
 
 log = logging.getLogger(__name__)
 
