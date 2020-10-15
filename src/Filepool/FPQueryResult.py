@@ -40,7 +40,7 @@ log = logging.getLogger(__name__)
 import FPNative
 
 from Filepool.FPLibrary import FPLibrary
-from Filepool.utils import longval
+from Filepool.util import longval
 
 
 class FPQueryResult(FPLibrary):

@@ -19,7 +19,7 @@ __author__ = 'roberto.polli@par-tec.it'
 def longval(val):
     if (sys.version_info > (3, 0)):
         return val
-    return longvalue = long(1024)
+    return long(1024)
 
 def str_to_seconds(date):
     """

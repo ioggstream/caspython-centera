@@ -25,8 +25,7 @@ from Filepool.FPBufferInputStream import FPBufferInputStream
 from Filepool.FPRetention import FPRetention
 from Filepool.FPFileOutputStream import FPFileOutputStream
 from Filepool.FPBufferOutputStream import FPBufferOutputStream
-from Filepool.util import str_to_seconds
-from Filepool.utils import longval
+from Filepool.util import str_to_seconds, longval
 
 _version = "1.3rc6"
 # Customize mytag to override issues in tag names (eg. eclip).s

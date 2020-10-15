@@ -38,7 +38,7 @@
 import FPNative
 
 from Filepool.FPLibrary import FPLibrary
-from Filepool.utils import longval
+from Filepool.util import longval
 
 class FPMonitor(FPLibrary):
 
