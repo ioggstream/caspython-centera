@@ -395,17 +395,29 @@ static PyObject *get_last_error_info( PyObject *self, PyObject *args ) {
     return NULL;
   }
 
+  #if PY_MAJOR_VERSION < 3
   if( PyList_Append( list, PyString_FromString( errInfo.trace ) ) != 0 ) {
+  #else
+  if( PyList_Append( list, PyUnicode_FromString( errInfo.trace) ) != 0 ) {
+  #endif
     PyErr_SetString( PyExc_Exception, "ErrorInfo Structure Parsing Failure" );
     return NULL;
   }
 
+  #if PY_MAJOR_VERSION < 3
   if( PyList_Append( list, PyString_FromString( errInfo.message ) ) != 0 ) {
+  #else
+  if( PyList_Append( list, PyUnicode_FromString( errInfo.message ) ) != 0 ) {
+  #endif
     PyErr_SetString( PyExc_Exception, "ErrorInfo Structure Parsing Failure" );
     return NULL;
   }
 
+  #if PY_MAJOR_VERSION < 3
   if( PyList_Append( list, PyString_FromString( errInfo.errorString ) ) != 0 ) {
+  #else
+  if( PyList_Append( list, PyUnicode_FromString( errInfo.errorString ) ) != 0 ) {
+  #endif
     PyErr_SetString( PyExc_Exception, "ErrorInfo Structure Parsing Failure" );
     return NULL;
   }
@@ -2700,7 +2712,11 @@ static PyObject *monitor_get_all_statistics( PyObject *self, PyObject *args ) {
     }
   }
 
+  #if PY_MAJOR_VERSION < 3
   ret = PyString_FromStringAndSize( buffer, length );
+  #else
+  ret  = PyUnicode_FromStringAndSize(buffer, length);
+  #endif
   free(buffer);
 
   return ret;
@@ -2771,7 +2787,11 @@ static PyObject *monitor_get_discovery( PyObject *self, PyObject *args ) {
     }
   }
 
+  #if PY_MAJOR_VERSION < 3
   ret = PyString_FromStringAndSize( buffer, length );
+  #else
+  ret  = PyUnicode_FromStringAndSize(buffer, length);
+  #endif
   free(buffer);
 
   return ret;
@@ -3299,13 +3319,55 @@ static PyMethodDef CenteraMethods[] = {
 
 };
 
+#if PY_MAJOR_VERSION >= 3
+struct module_state {
+    PyObject *error;
+};
+#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
+#else
+#define GETSTATE(m) (&_state)
+static struct module_state _state;
+#endif
+
+
+#if PY_MAJOR_VERSION >= 3
+
+static int myextension_traverse(PyObject *m, visitproc visit, void *arg) {
+    Py_VISIT(GETSTATE(m)->error);
+    return 0;
+}
+
+static int myextension_clear(PyObject *m) {
+    Py_CLEAR(GETSTATE(m)->error);
+    return 0;
+}
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "FPNative",
+        NULL,
+        sizeof(struct module_state),
+        CenteraMethods,
+        NULL,
+        myextension_traverse,
+        myextension_clear,
+        NULL
+}; 
 
 PyMODINIT_FUNC
+PyInit_FPNative(void){
+#else
+PyMODINIT_FUNC
 initFPNative(void) {
+#endif
 
   PyObject *m;
 
-  m = Py_InitModule( "FPNative", CenteraMethods );
+  #if PY_MAJOR_VERSION >= 3
+    m = PyModule_Create(&moduledef);
+  #else
+    m = Py_InitModule("FPNative", CenteraMethods);
+  #endif
 
   //tmp = PyFloat_AsDouble(3);
   //PyDict_SetItemString( d, "pi", tmp );

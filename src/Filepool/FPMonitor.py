@@ -37,12 +37,12 @@
 
 import FPNative
 
-from FPLibrary import FPLibrary
-
+from Filepool.FPLibrary import FPLibrary
+from Filepool.utils import longval
 
 class FPMonitor(FPLibrary):
 
-    handle = 0L
+    handle = longval(0)
     address = ''
     event = 0
 

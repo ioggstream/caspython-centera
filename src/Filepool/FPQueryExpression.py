@@ -37,12 +37,13 @@
 
 import FPNative
 
-from FPLibrary import FPLibrary
+from Filepool.FPLibrary import FPLibrary
+from Filepool.utils import longval
 
 
 class FPQueryExpression(FPLibrary):
 
-    handle = 0
+    handle = longval(0)
 
     def __init__(self):
 

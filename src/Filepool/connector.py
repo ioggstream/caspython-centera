@@ -26,7 +26,7 @@ from Filepool.FPRetention import FPRetention
 from Filepool.FPFileOutputStream import FPFileOutputStream
 from Filepool.FPBufferOutputStream import FPBufferOutputStream
 from Filepool.util import str_to_seconds
-
+from Filepool.utils import longval
 
 _version = "1.3rc6"
 # Customize mytag to override issues in tag names (eg. eclip).s
@@ -36,7 +36,7 @@ MYTAG_ = ""
 SEC_TO_MILLISEC = 1000
 
 POOL_DEFAULT_OPTIONS = {
-    FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD: 100 * 1024L
+    FPLibrary.FP_OPTION_EMBEDDED_DATA_THRESHOLD: 100 * longval(1024)
 }
 RE_INVALID_TAGS = [
     (re.compile(r'^[^a-zA-Z]'), 'TAG must start with a letter.'),

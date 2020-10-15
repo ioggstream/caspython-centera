@@ -5,12 +5,21 @@ Helper functions for Filepool.
 Author: roberto.polli@par-tec.it
 License: GPLv2
 """
+import sys
 from time import mktime
 from dateutil import parser as dateparser
-from ConfigParser import ConfigParser
+if (sys.version_info > (3, 0)):
+    from configparser import ConfigParser
+else:
+    from ConfigParser import ConfigParser
 
 __author__ = 'roberto.polli@par-tec.it'
 
+
+def longval(val):
+    if (sys.version_info > (3, 0)):
+        return val
+    return longvalue = long(1024)
 
 def str_to_seconds(date):
     """

@@ -35,7 +35,7 @@
 #
 #
 
-from FPException import FPException
+from Filepool.FPException import FPException
 
 
 class FPClientException(FPException):

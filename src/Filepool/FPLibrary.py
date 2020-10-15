@@ -37,10 +37,10 @@
 
 import FPNative
 
-from FPException import FPException
-from FPNetException import FPNetException
-from FPServerException import FPServerException
-from FPClientException import FPClientException
+from Filepool.FPException import FPException
+from Filepool.FPNetException import FPNetException
+from Filepool.FPServerException import FPServerException
+from Filepool.FPClientException import FPClientException
 
 
 class FPLibrary:
